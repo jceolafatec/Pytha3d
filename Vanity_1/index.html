@@ -145,9 +145,9 @@
 
             // GUI for controlling planes
             const gui = new dat.GUI();
-            gui.add(planes.x, 'constant', -1, 1).name('X Section');
-            gui.add(planes.y, 'constant', -1, 1).name('Y Section');
-            gui.add(planes.z, 'constant', -1, 1).name('Z Section');
+            gui.add(planes.x, 'constant', -1000, 1000).name('X Section');
+            gui.add(planes.y, 'constant', -1000, 1000).name('Y Section');
+            gui.add(planes.z, 'constant', -1000, 1000).name('Z Section');
             gui.add({ toggleClipping: false }, 'toggleClipping').name('Enable Clipping').onChange(value => {
                 materials.forEach(mat => {
                     mat.clippingPlanes = value ? [planes.x, planes.y, planes.z] : [];
