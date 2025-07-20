@@ -105,7 +105,6 @@
         let scene, camera, renderer, controls;
         let model, materials = [];
         let isWireframe = false;
-        let gui;
         
         // Initialize the scene
         function init() {
@@ -144,8 +143,11 @@
                 z: new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
             };
 
-            // Initialize GUI
-            gui = new dat.GUI();
+            // GUI for controlling planes
+            const gui = new dat.GUI();
+            gui.add(planes.x, 'constant', -10000, 10000).name('X Section');
+            gui.add(planes.y, 'constant', -10000, 10000).name('Y Section');
+            gui.add(planes.z, 'constant', -10000, 10000).name('Z Section');
             gui.add({ toggleClipping: false }, 'toggleClipping').name('Enable Clipping').onChange(value => {
                 materials.forEach(mat => {
                     mat.clippingPlanes = value ? [planes.x, planes.y, planes.z] : [];
@@ -257,30 +259,6 @@
                     controls.target.copy(new THREE.Vector3(0, size.y * 0.2, 0));
                     controls.update();
                     
-                    // Update clipping plane controls with bounding box limits
-                    const planes = {
-                        x: new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
-                        y: new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
-                        z: new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
-                    };
-
-                    // Remove existing GUI controls (except toggleClipping)
-                    gui.__controllers.forEach(controller => {
-                        if (controller.property !== 'toggleClipping') {
-                            gui.remove(controller);
-                        }
-                    });
-
-                    // Add new GUI controls with dynamic ranges
-                    gui.add(planes.x, 'constant', -size.x / 2, size.x / 2).name('X Section');
-                    gui.add(planes.y, 'constant', -size.y / 2, size.y / 2).name('Y Section');
-                    gui.add(planes.z, 'constant', -size.z / 2, size.z / 2).name('Z Section');
-
-                    // Update materials with new clipping planes
-                    materials.forEach(mat => {
-                        mat.clippingPlanes = gui.__controllers[0].object.toggleClipping ? [planes.x, planes.y, planes.z] : [];
-                    });
-                    
                     document.getElementById('loading').style.display = 'none';
                 },
                 function (xhr) {
@@ -290,7 +268,7 @@
                 function (error) {
                     console.error('Error loading model:', error);
                     document.getElementById('loading').textContent = 'Error loading model';
-                    document.getElementById('error').styleDISPLAY = 'block';
+                    document.getElementById('error').style.display = 'block';
                     document.getElementById('error').textContent = `Error: ${error.message || 'Failed to load model.glb'}`;
                     document.getElementById('error').innerHTML += `
                         <br><br>Troubleshooting:
