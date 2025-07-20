@@ -105,6 +105,7 @@
         let scene, camera, renderer, controls;
         let model, materials = [];
         let isWireframe = false;
+        let gui, clippingPlanes = {};
         
         // Initialize the scene
         function init() {
@@ -127,7 +128,7 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.outputEncoding = THREE.sRGBEncoding;
             renderer.physicallyCorrectLights = true;
-            renderer.localClippingEnabled = true;
+            renderer.localClippingEnabled = true; // Ensure clipping is enabled
 
             // Add OrbitControls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -136,22 +137,10 @@
             controls.minDistance = 0.5;
             controls.maxDistance = 50;
 
-            // Clipping planes
-            const planes = {
-                x: new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
-                y: new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
-                z: new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
-            };
-
-            // GUI for controlling planes
-            const gui = new dat.GUI();
-            gui.add(planes.x, 'constant', -1000, 1000).name('X Section');
-            gui.add(planes.y, 'constant', -1000, 1000).name('Y Section');
-            gui.add(planes.z, 'constant', -1000, 1000).name('Z Section');
+            // Initialize GUI
+            gui = new dat.GUI();
             gui.add({ toggleClipping: false }, 'toggleClipping').name('Enable Clipping').onChange(value => {
-                materials.forEach(mat => {
-                    mat.clippingPlanes = value ? [planes.x, planes.y, planes.z] : [];
-                });
+                updateClippingPlanes(value);
             });
 
             // Add enhanced lighting
@@ -181,6 +170,18 @@
             animate();
         }
         
+        // Update clipping planes for materials
+        function updateClippingPlanes(enable) {
+            materials.forEach(mat => {
+                mat.clippingPlanes = enable ? [
+                    clippingPlanes.x,
+                    clippingPlanes.y,
+                    clippingPlanes.z
+                ] : [];
+                mat.needsUpdate = true;
+            });
+        }
+
         // Load GLB model
         function loadModel(modelPath) {
             const loader = new THREE.GLTFLoader();
@@ -218,7 +219,7 @@
                                 materials.push(child.material);
                             }
                             
-                            // Enhance material
+                            // Enhance material with clipping support
                             child.material = new THREE.MeshStandardMaterial({
                                 ...child.material,
                                 metalness: 0.2,
@@ -226,6 +227,8 @@
                                 side: THREE.DoubleSide,
                                 clippingPlanes: []
                             });
+                            child.material.clipIntersection = true; // Ensure clipping works as expected
+                            child.material.clipShadows = true;
                             
                             // Add edges
                             const edges = new THREE.EdgesGeometry(child.geometry, 15);
@@ -258,6 +261,28 @@
                     camera.position.set(-cameraZ, cameraZ * 0.7, -cameraZ);
                     controls.target.copy(new THREE.Vector3(0, size.y * 0.2, 0));
                     controls.update();
+                    
+                    // Update clipping plane controls with bounding box limits
+                    clippingPlanes = {
+                        x: new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
+                        y: new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
+                        z: new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
+                    };
+
+                    // Remove existing GUI controls (except toggleClipping)
+                    gui.__controllers.forEach(controller => {
+                        if (controller.property !== 'toggleClipping') {
+                            gui.remove(controller);
+                        }
+                    });
+
+                    // Add new GUI controls with dynamic ranges and step size
+                    gui.add(clippingPlanes.x, 'constant', -size.x / 2, size.x / 2, size.x / 100).name('X Section');
+                    gui.add(clippingPlanes.y, 'constant', -size.y / 2, size.y / 2, size.y / 100).name('Y Section');
+                    gui.add(clippingPlanes.z, 'constant', -size.z / 2, size.z / 2, size.z / 100).name('Z Section');
+
+                    // Apply clipping planes if enabled
+                    updateClippingPlanes(gui.__controllers[0].object.toggleClipping);
                     
                     document.getElementById('loading').style.display = 'none';
                 },
