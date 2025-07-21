@@ -17,6 +17,7 @@
             display: block; 
             width: 100vw;
             height: 100vh;
+    
         }
         #loading {
             position: absolute;
@@ -60,56 +61,17 @@
             max-height: 80vh;
             overflow-y: auto;
             display: none;
-            width: 250px;
         }
         #group-controls h3 {
             margin-top: 0;
             margin-bottom: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #444;
         }
         .group-toggle {
-            margin-bottom: 3px;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-        .group-toggle:hover {
-            background: rgba(255,255,255,0.1);
+            margin-bottom: 5px;
         }
         .group-toggle label {
             margin-left: 5px;
             cursor: pointer;
-            user-select: none;
-            flex-grow: 1;
-        }
-        .group-toggle .toggle-children {
-            color: #aaa;
-            cursor: pointer;
-            margin-left: 5px;
-            font-size: 12px;
-            padding: 0 5px;
-        }
-        .children-container {
-            margin-left: 20px;
-            border-left: 1px solid #444;
-            padding-left: 5px;
-            display: none;
-        }
-        .children-container.visible {
-            display: block;
-        }
-        button {
-            background: #444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            margin: 2px 0;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #555;
         }
     </style>
 </head>
@@ -122,7 +84,7 @@
         <button onclick="toggleGroupControls()">Toggle Groups</button>
     </div>
     <div id="group-controls">
-        <h3>Model Hierarchy</h3>
+        <h3>Group Visibility</h3>
         <div id="group-toggles"></div>
     </div>
     <canvas id="model-viewer"></canvas>
@@ -237,96 +199,38 @@
             controls.style.display = controls.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Setup group visibility controls with hierarchy support
+        // Setup group visibility controls
         function setupGroupControls() {
             const container = document.getElementById('group-toggles');
             container.innerHTML = '';
             groupControls = {};
             
-            // Recursive function to create group toggles
-            function createGroupToggle(object, parentElement, level = 0) {
-                if (!object.isGroup && !object.isMesh) return;
-                
-                const groupName = object.name || 'Unnamed Group';
-                const groupId = groupName.replace(/\s+/g, '-') + '-' + Math.random().toString(36).substr(2, 9);
-                
-                // Create container for this group
-                const groupDiv = document.createElement('div');
-                groupDiv.className = 'group-toggle';
-                groupDiv.style.paddingLeft = (level * 15) + 'px';
-                
-                // Create checkbox
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.checked = object.visible;
-                checkbox.id = groupId;
-                
-                // Create label
-                const label = document.createElement('label');
-                label.htmlFor = groupId;
-                label.textContent = groupName;
-                
-                // Add checkbox and label
-                groupDiv.appendChild(checkbox);
-                groupDiv.appendChild(label);
-                
-                // If this object has children, add toggle button and container
-                if (object.children && object.children.length > 0) {
-                    const toggleBtn = document.createElement('span');
-                    toggleBtn.className = 'toggle-children';
-                    toggleBtn.textContent = '▶';
-                    toggleBtn.onclick = function(e) {
-                        e.stopPropagation();
-                        const wasVisible = childrenContainer.style.display === 'block';
-                        childrenContainer.style.display = wasVisible ? 'none' : 'block';
-                        toggleBtn.textContent = wasVisible ? '▶' : '▼';
-                    };
-                    groupDiv.appendChild(toggleBtn);
+            // Find all groups in the model
+            model.traverse(child => {
+                if (child.isGroup || (child.isMesh && child.parent === model)) {
+                    const groupName = child.name || 'Unnamed Group';
+                    groupControls[groupName] = child;
                     
-                    const childrenContainer = document.createElement('div');
-                    childrenContainer.className = 'children-container';
+                    // Create toggle element
+                    const div = document.createElement('div');
+                    div.className = 'group-toggle';
                     
-                    // Add children to container
-                    object.children.forEach(child => {
-                        createGroupToggle(child, childrenContainer, level + 1);
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = child.visible;
+                    checkbox.id = 'toggle-' + groupName.replace(/\s+/g, '-');
+                    checkbox.addEventListener('change', (e) => {
+                        child.visible = e.target.checked;
                     });
                     
-                    groupDiv.appendChild(childrenContainer);
-                }
-                
-                // Add event listener to toggle visibility
-                checkbox.addEventListener('change', function(e) {
-                    object.visible = e.target.checked;
+                    const label = document.createElement('label');
+                    label.htmlFor = checkbox.id;
+                    label.textContent = groupName;
                     
-                    // Recursively update all children
-                    if (object.children && object.children.length > 0) {
-                        object.traverse(child => {
-                            if (child.isGroup || child.isMesh) {
-                                child.visible = e.target.checked;
-                                // Update corresponding checkbox if it exists
-                                const childCheckbox = document.querySelector(`input[id^="${child.name || 'Unnamed Group'}-"]`);
-                                if (childCheckbox) {
-                                    childCheckbox.checked = e.target.checked;
-                                }
-                            }
-                        });
-                    }
-                });
-                
-                // Add to parent element
-                if (parentElement) {
-                    parentElement.appendChild(groupDiv);
-                } else {
-                    container.appendChild(groupDiv);
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    container.appendChild(div);
                 }
-                
-                // Store reference
-                groupControls[groupId] = object;
-            }
-            
-            // Start creating toggles from model root children
-            model.children.forEach(child => {
-                createGroupToggle(child, container);
             });
             
             // Show the controls container
@@ -405,7 +309,7 @@
                     gui.__folders['Y Clipping'].__controllers[0].min(-modelSize.y/2).max(modelSize.y/2).step(modelSize.y/100);
                     gui.__folders['Z Clipping'].__controllers[0].min(-modelSize.z/2).max(modelSize.z/2).step(modelSize.z/100);
                     
-                    // Setup hierarchical group controls
+                    // Setup group controls
                     setupGroupControls();
                     
                     // Calculate optimal camera distance
