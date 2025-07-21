@@ -49,13 +49,42 @@
             padding: 10px;
             border-radius: 5px;
         }
+        #group-controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none;
+        }
+        #group-controls h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .group-toggle {
+            margin-bottom: 5px;
+        }
+        .group-toggle label {
+            margin-left: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div id="error"></div>
     <div id="loading">Loading 3D model...</div>
-        <div id="controls">
+    <div id="controls">
+        <button onclick="toggleWireframe()">Toggle Wireframe</button>
         <button onclick="resetCamera()">Reset View</button>
+        <button onclick="toggleGroupControls()">Toggle Groups</button>
+    </div>
+    <div id="group-controls">
+        <h3>Group Visibility</h3>
+        <div id="group-toggles"></div>
     </div>
     <canvas id="model-viewer"></canvas>
 
@@ -66,12 +95,13 @@
         let isWireframe = false;
         let gui;
         let clippingPlanes = [
-            new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),  // X-axis plane
-            new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),  // Y-axis plane
-            new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)   // Z-axis plane
+            new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
         ];
         let modelSize = new THREE.Vector3();
         let modelCenter = new THREE.Vector3();
+        let groupControls = {};
         
         // Initialize the scene
         function init() {
@@ -94,7 +124,7 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.outputEncoding = THREE.sRGBEncoding;
             renderer.physicallyCorrectLights = true;
-            renderer.localClippingEnabled = true; // Always enable clipping
+            renderer.localClippingEnabled = true;
 
             // Add OrbitControls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -103,7 +133,7 @@
             controls.minDistance = 0.5;
             controls.maxDistance = 50;
 
-            // Initialize GUI - only for clipping controls
+            // Initialize GUI
             gui = new dat.GUI();
             
             // Add clipping plane controls
@@ -132,7 +162,7 @@
             yFolder.open();
             zFolder.open();
 
-            // Add enhanced lighting
+            // Add lighting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
             scene.add(ambientLight);
             
@@ -154,12 +184,56 @@
             animate();
         }
         
-        // Update clipping planes for all materials
+        // Update clipping planes
         function updateClipping() {
             materials.forEach(mat => {
                 mat.clippingPlanes = clippingPlanes;
                 mat.needsUpdate = true;
             });
+        }
+
+        // Toggle group controls visibility
+        function toggleGroupControls() {
+            const controls = document.getElementById('group-controls');
+            controls.style.display = controls.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Setup group visibility controls
+        function setupGroupControls() {
+            const container = document.getElementById('group-toggles');
+            container.innerHTML = '';
+            groupControls = {};
+            
+            // Find all groups in the model
+            model.traverse(child => {
+                if (child.isGroup || (child.isMesh && child.parent === model)) {
+                    const groupName = child.name || 'Unnamed Group';
+                    groupControls[groupName] = child;
+                    
+                    // Create toggle element
+                    const div = document.createElement('div');
+                    div.className = 'group-toggle';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = child.visible;
+                    checkbox.id = 'toggle-' + groupName.replace(/\s+/g, '-');
+                    checkbox.addEventListener('change', (e) => {
+                        child.visible = e.target.checked;
+                    });
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = checkbox.id;
+                    label.textContent = groupName;
+                    
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    container.appendChild(div);
+                }
+            });
+            
+            // Show the controls container
+            document.getElementById('group-controls').style.display = 'block';
         }
 
         // Load GLB model
@@ -205,7 +279,7 @@
                                 metalness: 0.2,
                                 roughness: 0.4,
                                 side: THREE.DoubleSide,
-                                clippingPlanes: clippingPlanes // Apply clipping immediately
+                                clippingPlanes: clippingPlanes
                             });
                             
                             // Add edges
@@ -233,6 +307,9 @@
                     gui.__folders['X Clipping'].__controllers[0].min(-modelSize.x/2).max(modelSize.x/2).step(modelSize.x/100);
                     gui.__folders['Y Clipping'].__controllers[0].min(-modelSize.y/2).max(modelSize.y/2).step(modelSize.y/100);
                     gui.__folders['Z Clipping'].__controllers[0].min(-modelSize.z/2).max(modelSize.z/2).step(modelSize.z/100);
+                    
+                    // Setup group controls
+                    setupGroupControls();
                     
                     // Calculate optimal camera distance
                     const maxDim = Math.max(modelSize.x, modelSize.y, modelSize.z);
