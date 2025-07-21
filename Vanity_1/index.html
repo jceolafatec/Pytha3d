@@ -79,7 +79,7 @@
     <div id="error"></div>
     <div id="loading">Loading 3D model...</div>
     <div id="controls">
-        <button onclick="toggleWireframe()">Toggle Wireframe</button>
+   
         <button onclick="resetCamera()">Reset View</button>
         <button onclick="toggleGroupControls()">Toggle Groups</button>
     </div>
@@ -175,6 +175,8 @@
             backLight.position.set(-1, -0.5, -1);
             scene.add(backLight);
 
+            setupGroupControls()
+                
             // Load the model
             loadModel('model.glb');
             
@@ -200,7 +202,62 @@
         }
 
         // Setup group visibility controls
-        setupGroupControls()
+        function setupGroupControls() {
+    const container = document.getElementById('group-toggles');
+    container.innerHTML = '';
+    groupControls = {};
+    
+    // Recursive function to process all groups and meshes
+    function processChild(child, level = 0) {
+        if (child.isGroup || child.isMesh) {
+            const groupName = child.name || 'Unnamed Group';
+            groupControls[groupName] = child;
+            
+            // Create toggle element with indentation based on level
+            const div = document.createElement('div');
+            div.className = 'group-toggle';
+            div.style.marginLeft = (level * 15) + 'px';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = child.visible;
+            checkbox.id = 'toggle-' + groupName.replace(/\s+/g, '-');
+            checkbox.addEventListener('change', (e) => {
+                child.visible = e.target.checked;
+                // Also toggle all children's visibility
+                child.traverse(descendant => {
+                    if (descendant.isGroup || descendant.isMesh) {
+                        descendant.visible = e.target.checked;
+                        // Update corresponding checkbox if it exists
+                        const descCheckbox = document.getElementById('toggle-' + (descendant.name || 'Unnamed Group').replace(/\s+/g, '-'));
+                        if (descCheckbox) {
+                            descCheckbox.checked = e.target.checked;
+                        }
+                    }
+                });
+            });
+            
+            const label = document.createElement('label');
+            label.htmlFor = checkbox.id;
+            label.textContent = groupName;
+            
+            div.appendChild(checkbox);
+            div.appendChild(label);
+            container.appendChild(div);
+            
+            // Process children recursively
+            if (child.children && child.children.length > 0) {
+                child.children.forEach(grandchild => processChild(grandchild, level + 1));
+            }
+        }
+    }
+    
+    // Start processing from the model root
+    model.children.forEach(child => processChild(child));
+    
+    // Show the controls container
+    document.getElementById('group-controls').style.display = 'block';
+}
            
 
         // Load GLB model
