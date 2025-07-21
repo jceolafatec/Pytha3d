@@ -67,9 +67,9 @@
         let isWireframe = false;
         let gui;
         let clippingPlanes = [
-            new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
-            new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
-            new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
+            new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),  // X-axis plane
+            new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),  // Y-axis plane
+            new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)   // Z-axis plane
         ];
         let modelSize = new THREE.Vector3();
         let modelCenter = new THREE.Vector3();
@@ -95,7 +95,7 @@
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.outputEncoding = THREE.sRGBEncoding;
             renderer.physicallyCorrectLights = true;
-            renderer.localClippingEnabled = true;
+            renderer.localClippingEnabled = true; // Always enable clipping
 
             // Add OrbitControls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -104,11 +104,34 @@
             controls.minDistance = 0.5;
             controls.maxDistance = 50;
 
-            // Initialize GUI
+            // Initialize GUI - only for clipping controls
             gui = new dat.GUI();
-            gui.add({ toggleClipping: false }, 'toggleClipping').name('Enable Clipping').onChange(value => {
-                updateClippingPlanes(value);
+            
+            // Add clipping plane controls
+            const xFolder = gui.addFolder('X Clipping');
+            xFolder.add(clippingPlanes[0], 'constant', -10, 10).step(0.1).name('Position').onChange(updateClipping);
+            xFolder.add({ flip: false }, 'flip').name('Flip Direction').onChange((val) => {
+                clippingPlanes[0].normal.set(val ? 1 : -1, 0, 0);
+                updateClipping();
             });
+            
+            const yFolder = gui.addFolder('Y Clipping');
+            yFolder.add(clippingPlanes[1], 'constant', -10, 10).step(0.1).name('Position').onChange(updateClipping);
+            yFolder.add({ flip: false }, 'flip').name('Flip Direction').onChange((val) => {
+                clippingPlanes[1].normal.set(0, val ? 1 : -1, 0);
+                updateClipping();
+            });
+            
+            const zFolder = gui.addFolder('Z Clipping');
+            zFolder.add(clippingPlanes[2], 'constant', -10, 10).step(0.1).name('Position').onChange(updateClipping);
+            zFolder.add({ flip: false }, 'flip').name('Flip Direction').onChange((val) => {
+                clippingPlanes[2].normal.set(0, 0, val ? 1 : -1);
+                updateClipping();
+            });
+            
+            xFolder.open();
+            yFolder.open();
+            zFolder.open();
 
             // Add enhanced lighting
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
@@ -116,16 +139,11 @@
             
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
             directionalLight.position.set(1, 1, 1);
-            directionalLight.castShadow = true;
             scene.add(directionalLight);
             
             const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
             backLight.position.set(-1, -0.5, -1);
             scene.add(backLight);
-            
-            const topLight = new THREE.DirectionalLight(0xffffff, 0.3);
-            topLight.position.set(0, 1, 0);
-            scene.add(topLight);
 
             // Load the model
             loadModel('model.glb');
@@ -137,16 +155,10 @@
             animate();
         }
         
-        // Update clipping planes for materials
-        function updateClippingPlanes(enable) {
+        // Update clipping planes for all materials
+        function updateClipping() {
             materials.forEach(mat => {
-                if (enable) {
-                    mat.clippingPlanes = clippingPlanes;
-                    mat.clipIntersection = true;
-                    mat.clipShadows = true;
-                } else {
-                    mat.clippingPlanes = null;
-                }
+                mat.clippingPlanes = clippingPlanes;
                 mat.needsUpdate = true;
             });
         }
@@ -189,15 +201,13 @@
                             }
                             
                             // Enhance material with clipping support
-                            if (child.material) {
-                                child.material = new THREE.MeshStandardMaterial({
-                                    ...child.material,
-                                    metalness: 0.2,
-                                    roughness: 0.4,
-                                    side: THREE.DoubleSide,
-                                    clippingPlanes: null
-                                });
-                            }
+                            child.material = new THREE.MeshStandardMaterial({
+                                ...child.material,
+                                metalness: 0.2,
+                                roughness: 0.4,
+                                side: THREE.DoubleSide,
+                                clippingPlanes: clippingPlanes // Apply clipping immediately
+                            });
                             
                             // Add edges
                             const edges = new THREE.EdgesGeometry(child.geometry, 15);
@@ -220,6 +230,11 @@
                     // Center the model
                     model.position.sub(modelCenter);
                     
+                    // Update GUI ranges based on model size
+                    gui.__folders['X Clipping'].__controllers[0].min(-modelSize.x/2).max(modelSize.x/2).step(modelSize.x/100);
+                    gui.__folders['Y Clipping'].__controllers[0].min(-modelSize.y/2).max(modelSize.y/2).step(modelSize.y/100);
+                    gui.__folders['Z Clipping'].__controllers[0].min(-modelSize.z/2).max(modelSize.z/2).step(modelSize.z/100);
+                    
                     // Calculate optimal camera distance
                     const maxDim = Math.max(modelSize.x, modelSize.y, modelSize.z);
                     const fov = camera.fov * (Math.PI / 180);
@@ -231,17 +246,6 @@
                     controls.target.copy(new THREE.Vector3(0, modelSize.y * 0.2, 0));
                     controls.update();
                     
-                    // Update clipping plane controls with bounding box limits
-                    // Remove existing GUI controls (except toggleClipping)
-                    while(gui.__controllers.length > 1) {
-                        gui.remove(gui.__controllers[1]);
-                    }
-
-                    // Add new GUI controls with dynamic ranges
-                    gui.add(clippingPlanes[0], 'constant', -modelSize.x/2, modelSize.x/2).step(modelSize.x/100).name('X Position');
-                    gui.add(clippingPlanes[1], 'constant', -modelSize.y/2, modelSize.y/2).step(modelSize.y/100).name('Y Position');
-                    gui.add(clippingPlanes[2], 'constant', -modelSize.z/2, modelSize.z/2).step(modelSize.z/100).name('Z Position');
-
                     // Hide loading message
                     document.getElementById('loading').style.display = 'none';
                 },
@@ -254,14 +258,6 @@
                     document.getElementById('loading').textContent = 'Error loading model';
                     document.getElementById('error').style.display = 'block';
                     document.getElementById('error').textContent = `Error: ${error.message || 'Failed to load model.glb'}`;
-                    document.getElementById('error').innerHTML += `
-                        <br><br>Troubleshooting:
-                        <ul>
-                            <li>Verify the model file exists at: ${window.location.href}model.glb</li>
-                            <li>Check browser console (F12) for details</li>
-                            <li>Ensure the GLB file is not corrupted</li>
-                            <li>Try a different browser</li>
-                        </ul>`;
                 }
             );
         }
