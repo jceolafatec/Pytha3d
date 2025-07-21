@@ -65,7 +65,12 @@
         let scene, camera, renderer, controls;
         let model, materials = [];
         let isWireframe = false;
-        let gui, clippingPlanes = [];
+        let gui;
+        let clippingPlanes = [
+            new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
+        ];
         let modelSize = new THREE.Vector3();
         let modelCenter = new THREE.Vector3();
         
@@ -122,13 +127,6 @@
             topLight.position.set(0, 1, 0);
             scene.add(topLight);
 
-            // Initialize clipping planes
-            clippingPlanes = [
-                new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
-                new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
-                new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
-            ];
-
             // Load the model
             loadModel('model.glb');
             
@@ -142,7 +140,13 @@
         // Update clipping planes for materials
         function updateClippingPlanes(enable) {
             materials.forEach(mat => {
-                mat.clippingPlanes = enable ? clippingPlanes : null;
+                if (enable) {
+                    mat.clippingPlanes = clippingPlanes;
+                    mat.clipIntersection = true;
+                    mat.clipShadows = true;
+                } else {
+                    mat.clippingPlanes = null;
+                }
                 mat.needsUpdate = true;
             });
         }
@@ -185,12 +189,15 @@
                             }
                             
                             // Enhance material with clipping support
-                            child.material = new THREE.MeshStandardMaterial({
-                                ...child.material,
-                                metalness: 0.2,
-                                roughness: 0.4,
-                                side: THREE.DoubleSide
-                            });
+                            if (child.material) {
+                                child.material = new THREE.MeshStandardMaterial({
+                                    ...child.material,
+                                    metalness: 0.2,
+                                    roughness: 0.4,
+                                    side: THREE.DoubleSide,
+                                    clippingPlanes: null
+                                });
+                            }
                             
                             // Add edges
                             const edges = new THREE.EdgesGeometry(child.geometry, 15);
@@ -226,33 +233,16 @@
                     
                     // Update clipping plane controls with bounding box limits
                     // Remove existing GUI controls (except toggleClipping)
-                    gui.__controllers.forEach(controller => {
-                        if (controller.property !== 'toggleClipping') {
-                            gui.remove(controller);
-                        }
-                    });
+                    while(gui.__controllers.length > 1) {
+                        gui.remove(gui.__controllers[1]);
+                    }
 
                     // Add new GUI controls with dynamic ranges
-                    const xFolder = gui.addFolder('X Clipping');
-                    xFolder.add(clippingPlanes[0], 'constant', -modelSize.x/2, modelSize.x/2).step(modelSize.x/100).name('Position');
-                    xFolder.add(clippingPlanes[0], 'negated').name('Flip Direction');
-                    
-                    const yFolder = gui.addFolder('Y Clipping');
-                    yFolder.add(clippingPlanes[1], 'constant', -modelSize.y/2, modelSize.y/2).step(modelSize.y/100).name('Position');
-                    yFolder.add(clippingPlanes[1], 'negated').name('Flip Direction');
-                    
-                    const zFolder = gui.addFolder('Z Clipping');
-                    zFolder.add(clippingPlanes[2], 'constant', -modelSize.z/2, modelSize.z/2).step(modelSize.z/100).name('Position');
-                    zFolder.add(clippingPlanes[2], 'negated').name('Flip Direction');
-                    
-                    // Open folders by default
-                    xFolder.open();
-                    yFolder.open();
-                    zFolder.open();
+                    gui.add(clippingPlanes[0], 'constant', -modelSize.x/2, modelSize.x/2).step(modelSize.x/100).name('X Position');
+                    gui.add(clippingPlanes[1], 'constant', -modelSize.y/2, modelSize.y/2).step(modelSize.y/100).name('Y Position');
+                    gui.add(clippingPlanes[2], 'constant', -modelSize.z/2, modelSize.z/2).step(modelSize.z/100).name('Z Position');
 
-                    // Apply clipping planes if enabled
-                    updateClippingPlanes(gui.__controllers[0].object.toggleClipping);
-                    
+                    // Hide loading message
                     document.getElementById('loading').style.display = 'none';
                 },
                 function (xhr) {
