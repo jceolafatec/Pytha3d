@@ -73,56 +73,25 @@
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.outputEncoding = THREE.sRGBEncoding;
             renderer.physicallyCorrectLights = true;
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
             
             // Add OrbitControls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             
-            // Improved lighting setup
-            // Hemisphere light for natural ambient lighting
-            const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.4);
-            hemiLight.position.set(0, 1, 0);
-            scene.add(hemiLight);
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
             
-            // Key light (main directional light)
-            const keyLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            keyLight.position.set(2, 2, 2);
-            keyLight.castShadow = true;
-            keyLight.shadow.mapSize.width = 2048; // Higher resolution shadows
-            keyLight.shadow.mapSize.height = 2048;
-            keyLight.shadow.camera.near = 0.1;
-            keyLight.shadow.camera.far = 50;
-            keyLight.shadow.camera.left = -10;
-            keyLight.shadow.camera.right = 10;
-            keyLight.shadow.camera.top = 10;
-            keyLight.shadow.camera.bottom = -10;
-            keyLight.shadow.bias = -0.0001; // Reduce shadow acne
-            scene.add(keyLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
             
-            // Fill light (softer, opposite direction)
-            const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
-            fillLight.position.set(-1, 0.5, -1);
-            scene.add(fillLight);
-            
-            // Rim light (backlight for edge highlights)
-            const rimLight = new THREE.DirectionalLight(0xffffff, 0.2);
-            rimLight.position.set(-1, 1, -2);
-            scene.add(rimLight);
-            
-            // Add subtle environment map for reflections
-            const cubeTextureLoader = new THREE.CubeTextureLoader();
-            const envMap = cubeTextureLoader.load([
-                'https://threejs.org/examples/textures/cube/skybox/px.jpg',
-                'https://threejs.org/examples/textures/cube/skybox/nx.jpg',
-                'https://threejs.org/examples/textures/cube/skybox/py.jpg',
-                'https://threejs.org/examples/textures/cube/skybox/ny.jpg',
-                'https://threejs.org/examples/textures/cube/skybox/pz.jpg',
-                'https://threejs.org/examples/textures/cube/skybox/nz.jpg'
-            ]);
-            scene.environment = envMap;
+            // Add second light for better edge visibility
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            backLight.position.set(-1, -1, -1);
+            scene.add(backLight);
             
             // Load the model from the 3d folder
             loadModel('model.glb');
@@ -162,11 +131,11 @@
                     model = gltf.scene;
                     scene.add(model);
                     
-                    // Add edges to all meshes and enhance materials
+                    // Add edges to all meshes
                     model.traverse(child => {
                         if (child.isMesh) {
                             // Create edges geometry (15° angle threshold)
-                            const edges = new THREE. rdfGeometry(child.geometry, 15);
+                            const edges = new THREE.EdgesGeometry(child.geometry, 15);
                             const edgeMaterial = new THREE.LineBasicMaterial({ 
                                 color: 0x000000,
                                 linewidth: 1.5
@@ -174,15 +143,9 @@
                             const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
                             child.add(edgeLines);
                             
-                            // Enhance material for better lighting response
-                            if (child.material) {
-                                child.material.metalness = 0.2; // Add slight metallic sheen
-                                child.material.roughness = 0.5; // Moderate roughness for balanced reflections
-                                child.material.envMap = scene.environment; // Apply environment map
-                                child.material.envMapIntensity = 0.5; // Subtle environment reflections
-                                child.material.flatShading = true;
-                                child.material.needsUpdate = true;
-                            }
+                            // Enhance original material for better contrast
+                            child.material.flatShading = true;
+                            child.material.needsUpdate = true;
                         }
                     });
                     
