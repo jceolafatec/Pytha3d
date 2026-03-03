@@ -1,0 +1,12 @@
+[
+  {
+    "id": "kitchen",
+    "name": "Kitchen",
+    "file": "assets/models/kitchen/model.glb",
+    "thumbnail": "assets/thumbnails/kitchen/image.png",
+    "description": "Model test",
+    "tags": [
+      "Model test"
+    ]
+  }
+]
