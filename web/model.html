@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer – GLTF Viewer 2.0</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <!-- Three.js + Controls + Loader + GUI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+
+  <style>
+        /* your styles from before (unchanged) */
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #040509;
+            color: #e3e7f0;
+        }
+        #viewer-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: #111;
+        }
+        #model-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #loading, #error { 
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 18px;
+            border-radius: 6px;
+            background: rgba(0,0,0,0.7);
+        }
+        #loading { top: 50%; transform: translate(-50%, -50%); }
+        #error {
+            top: 20px;
+            color: #ff6b6b;
+            display: none;
+            width: auto;
+        }
+        #controls {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 10px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            color: white;
+        }
+        #group-controls {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 12px;
+            max-height: 60vh;
+            overflow-y: auto;
+            border-radius: 6px;
+            display: none;
+        }
+    </style>
+</head>
+
+
+
+<body>
+<header class="site-header">
+    <div class="logo">GLTF Viewer <span class="accent">2.0</span></div>
+    <nav class="site-nav">
+        <a href="index.html" class="nav-link">Back to portfolio</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <!-- Meta -->
+    <section>
+        <h1 id="modelTitle">Loading model...</h1>
+        <p id="modelDescription"></p>
+        <p><strong>Source file:</strong> <span id="modelFilePath"></span></p>
+        <div id="modelTags"></div>
+    </section>
+
+    <!-- 3D Viewer -->
+    <div id="viewer-container">
+        <div id="loading">Loading 3D model...</div>
+        <div id="error"></div>
+
+        <div id="controls">
+            <button onclick="toggleWireframe()">Toggle Wireframe</button>
+            <button onclick="resetCamera()">Reset View</button>
+            <button onclick="toggleGroupControls()">Toggle Groups</button>
+        </div>
+
+        <div id="group-controls">
+            <h3>Groups</h3>
+            <div id="group-toggles"></div>
+        </div>
+
+        <canvas id="model-canvas"></canvas>
+    </div>
+
+    <section style="margin-top: 2rem;">
+        <h2>More models</h2>
+        <div id="relatedModels" class="models-grid small"></div>
+    </section>
+
+</main>
+
+<footer class="site-footer">
+    <span>GLTF Viewer 2.0 · Three.js powered viewer</span>
+</footer>
+
+<!-- Full viewer script -->
+<script src="assets/js/viewer.js"></script>
+
+</body>
+</html>
