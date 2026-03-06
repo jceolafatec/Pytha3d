@@ -1,50 +1,80 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>3D Portfolio – GLTF Viewer 2.0</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="assets/css/styles.css" />
+    <meta charset="UTF-8" />
+    <title>3D Portfolio – GLTF Models</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- three.js + GLTFLoader from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.152/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
+    <header class="top-bar">
+        <div class="brand">
+            <div class="logo-circle"></div>
+            <div class="brand-text">
+                <h1>3D Portfolio</h1>
+                <span>GLTF / GLB Model Viewer</span>
+            </div>
+        </div>
+    </header>
 
-  <header class="site-header">
-    <div class="logo">GLTF Viewer <span class="accent">2.0</span></div>
-    <nav class="site-nav">
-      <a class="nav-link active" href="index.html">Portfolio</a>
-    </nav>
-  </header>
+    <main class="layout">
+        <!-- LEFT: gallery -->
+        <section class="gallery-panel">
+            <div class="panel-header">
+                <h2>Projects</h2>
+                <span class="panel-subtitle">Click a card to load the model</span>
+            </div>
+            <div id="cards-container" class="cards-grid">
+                <!-- Cards are injected by app.js -->
+            </div>
+        </section>
 
-  <main class="container">
-    
-    <section class="hero">
-      <h1>Your 3D Model Portfolio</h1>
-      <p>Browse interactive GLTF/GLB models exported from Pytha.</p>
-    </section>
+        <!-- RIGHT: viewer -->
+        <section class="viewer-panel">
+            <div class="viewer-header">
+                <div>
+                    <h2 id="viewer-title">Select a model</h2>
+                    <p id="viewer-description" class="viewer-description">
+                        Choose a project from the left to preview the 3D model here.
+                    </p>
+                </div>
+                <div class="viewer-meta">
+                    <span id="viewer-tag" class="viewer-tag">Idle</span>
+                </div>
+            </div>
 
-    <section class="controls">
-      <input
-        id="searchInput"
-        class="search-input"
-        type="search"
-        placeholder="Search by name or tag..."
-      />
-      <div id="tagFilters" class="tag-filters"></div>
-    </section>
+            <div id="viewer-canvas-wrapper" class="viewer-canvas-wrapper">
+                <canvas id="viewer-canvas"></canvas>
+                <div id="viewer-placeholder" class="viewer-placeholder">
+                    <div class="placeholder-inner">
+                        <div class="placeholder-icon">🧩</div>
+                        <p>3D preview area</p>
+                        <small>Pick a project to load its GLTF/GLB model.</small>
+                    </div>
+                </div>
+            </div>
 
-    <section>
-      <div id="modelsGrid" class="models-grid"></div>
-      <div id="emptyState" class="empty-state" hidden>
-        No models match your search yet.
-      </div>
-    </section>
+            <div id="viewer-footer" class="viewer-footer">
+                <div class="hint">
+                    <span class="dot"></span>
+                    <span>Mouse drag to orbit · Scroll to zoom · Right-click to pan</span>
+                </div>
+                <button id="reset-camera-btn" class="pill-button" disabled>
+                    Reset camera
+                </button>
+            </div>
+        </section>
+    </main>
 
-  </main>
+    <footer class="site-footer">
+        <span>© <span id="year"></span> · 3D Portfolio</span>
+        <span>Built with three.js &amp; GLTFLoader</span>
+    </footer>
 
-  <footer class="site-footer">
-    <span>GLTF Viewer 2.0 · Built for 3D model portfolios</span>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
