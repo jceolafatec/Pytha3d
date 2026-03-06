@@ -2,79 +2,253 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>3D Portfolio – GLTF Models</title>
+    <title>3D Portfolio</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
 
-    <!-- three.js + GLTFLoader from CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.152/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        :root {
+            --bg-main: #f5f6f8;
+            --bg-card: #ffffff;
+            --border-soft: #e1e4eb;
+            --accent: #3b82f6;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --shadow-soft: 0 14px 30px rgba(15, 23, 42, 0.12);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #ffffff, #eef1f7);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            padding: 12px 24px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            background: rgba(245, 246, 248, 0.9);
+            z-index: 10;
+        }
+
+        .brand {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            background: conic-gradient(from 160deg, #3b82f6, #22c55e, #f97316, #3b82f6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .brand-text h1 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand-text span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        main {
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px 16px 32px;
+        }
+
+        .intro {
+            margin-bottom: 18px;
+        }
+
+        .intro h2 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .intro p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-soft);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.16);
+            border-color: var(--accent);
+        }
+
+        .card-thumb {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            background: #e5e7eb;
+        }
+
+        .card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-tag {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #e5e7eb;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 999px;
+        }
+
+        .card-body {
+            padding: 10px 12px 12px;
+        }
+
+        .card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .card-type {
+            font-size: 0.7rem;
+            padding: 3px 7px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.9);
+            background: #f9fafb;
+            color: #4b5563;
+        }
+
+        .card-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        footer {
+            width: 100%;
+            max-width: 1100px;
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            padding: 0 16px 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding-inline: 16px;
+            }
+            main {
+                padding-inline: 12px;
+            }
+            footer {
+                padding-inline: 12px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="top-bar">
-        <div class="brand">
-            <div class="logo-circle"></div>
-            <div class="brand-text">
-                <h1>3D Portfolio</h1>
-                <span>GLTF / GLB Model Viewer</span>
-            </div>
+<header>
+    <div class="brand">
+        <div class="brand-logo"></div>
+        <div class="brand-text">
+            <h1>3D Portfolio</h1>
+            <span>Interactive models • GLTF/GLB • Web-based viewer</span>
         </div>
-    </header>
+    </div>
+</header>
 
-    <main class="layout">
-        <!-- LEFT: gallery -->
-        <section class="gallery-panel">
-            <div class="panel-header">
-                <h2>Projects</h2>
-                <span class="panel-subtitle">Click a card to load the model</span>
-            </div>
-            <div id="cards-container" class="cards-grid">
-                <!-- Cards are injected by app.js -->
-            </div>
-        </section>
+<main>
+    <section class="intro">
+        <h2>Selected 3D Projects</h2>
+        <p>Click a project card to open the interactive 3D viewer.</p>
+    </section>
 
-        <!-- RIGHT: viewer -->
-        <section class="viewer-panel">
-            <div class="viewer-header">
-                <div>
-                    <h2 id="viewer-title">Select a model</h2>
-                    <p id="viewer-description" class="viewer-description">
-                        Choose a project from the left to preview the 3D model here.
-                    </p>
+    <section class="grid">
+
+        <!-- Kitchen 1 card (links to your existing index.html) -->
+        <a class="card" href="./assets/models/Kitchen_1/index.html" target="_blank">
+            <div class="card-thumb">
+                <img src="assets/thumbnails/kitchen_1.jpg" alt="Kitchen 1 thumbnail" />
+                <span class="card-tag">GLTF Viewer</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title-row">
+                    <span class="card-title">Kitchen 1</span>
+                    <span class="card-type">Kitchen</span>
                 </div>
-                <div class="viewer-meta">
-                    <span id="viewer-tag" class="viewer-tag">Idle</span>
-                </div>
+                <p class="card-desc">
+                    Detailed kitchen model showcasing joinery and layout.
+                </p>
             </div>
+        </a>
 
-            <div id="viewer-canvas-wrapper" class="viewer-canvas-wrapper">
-                <canvas id="viewer-canvas"></canvas>
-                <div id="viewer-placeholder" class="viewer-placeholder">
-                    <div class="placeholder-inner">
-                        <div class="placeholder-icon">🧩</div>
-                        <p>3D preview area</p>
-                        <small>Pick a project to load its GLTF/GLB model.</small>
-                    </div>
-                </div>
-            </div>
+        <!-- You can copy/paste this block for more models later -->
 
-            <div id="viewer-footer" class="viewer-footer">
-                <div class="hint">
-                    <span class="dot"></span>
-                    <span>Mouse drag to orbit · Scroll to zoom · Right-click to pan</span>
-                </div>
-                <button id="reset-camera-btn" class="pill-button" disabled>
-                    Reset camera
-                </button>
-            </div>
-        </section>
-    </main>
+    </section>
+</main>
 
-    <footer class="site-footer">
-        <span>© <span id="year"></span> · 3D Portfolio</span>
-        <span>Built with three.js &amp; GLTFLoader</span>
-    </footer>
+<footer>
+    <span>© <span id="year"></span> · 3D Portfolio</span>
+    <span>Built with HTML, CSS &amp; your existing GLTF viewers</span>
+</footer>
 
-    <script src="app.js"></script>
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
