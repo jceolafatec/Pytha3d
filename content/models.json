@@ -1,12 +1,12 @@
 [
-  {
-    "id": "kitchen-island-bench-01",
-    "name": "Kitchen Island Bench #01",
-    "file": "content/models/kitchen-island-bench-01/Island Bench.glb",
-    "thumbnail": "content/thumbnails/kitchen-island-bench-01/Front.png",
-    "description": "Modern Island Bench",
-    "tags": [
-      "Kitchen Island Bench"
-    ]
-  }
+
+{
+  "id": "kitchen-island-bench-01",
+  "name": "Kitchen Island Bench #01",
+  "file": "content/models/kitchen-island-bench-01/island-bench.glb",
+  "thumbnail": "content/thumbnails/kitchen-island-bench-01/front.png",
+  "description": "Modern Island Bench",
+  "tags": ["Kitchen Island Bench"]
+}
+
 ]
