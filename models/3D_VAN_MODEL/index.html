@@ -1,0 +1,381 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <style>
+        body { 
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        canvas { 
+            display: block; 
+            width: 50vw;
+            height: 50vh;
+    
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        #error {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: red;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 300px;
+            display: none;
+        }
+        #controls {
+            position: absolute;
+            top: 300px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #group-controls {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none;
+        }
+        #group-controls h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .group-toggle {
+            margin-bottom: 5px;
+        }
+        .group-toggle label {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="error"></div>
+    <div id="loading">Loading 3D model...</div>
+    <div id="controls">
+        <button onclick="toggleWireframe()">Toggle Wireframe</button>
+        <button onclick="resetCamera()">Reset View</button>
+        <button onclick="toggleGroupControls()">Toggle Groups</button>
+    </div>
+    <div id="group-controls">
+        <h3>Group Visibility</h3>
+        <div id="group-toggles"></div>
+    </div>
+    <canvas id="model-viewer"></canvas>
+
+    <script>
+        // Main Three.js variables
+        let scene, camera, renderer, controls;
+        let model, materials = [];
+        let isWireframe = false;
+        let gui;
+        let clippingPlanes = [
+            new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
+            new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
+        ];
+        let modelSize = new THREE.Vector3();
+        let modelCenter = new THREE.Vector3();
+        let groupControls = {};
+        
+        // Initialize the scene
+        function init() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x222222);
+            
+            // Create camera
+            camera = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(-1, 1, -1);
+            
+            // Create renderer
+            const canvas = document.getElementById('model-viewer');
+            renderer = new THREE.WebGLRenderer({ 
+                canvas, 
+                antialias: true,
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            renderer.physicallyCorrectLights = true;
+            renderer.localClippingEnabled = true;
+
+            // Add OrbitControls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 0.5;
+            controls.maxDistance = 50;
+
+            // Initialize GUI
+            gui = new dat.GUI();
+            
+            // Add clipping plane controls
+            const xFolder = gui.addFolder('X Clipping');
+            xFolder.add(clippingPlanes[0], 'constant', -10, 10).step(0.1).name('Position').onChange(updateClipping);
+            xFolder.add({ flip: false }, 'flip').name('Flip Direction').onChange((val) => {
+                clippingPlanes[0].normal.set(val ? 1 : -1, 0, 0);
+                updateClipping();
+            });
+            
+            const yFolder = gui.addFolder('Y Clipping');
+            yFolder.add(clippingPlanes[1], 'constant', -10, 10).step(0.1).name('Position').onChange(updateClipping);
+            yFolder.add({ flip: false }, 'flip').name('Flip Direction').onChange((val) => {
+                clippingPlanes[1].normal.set(0, val ? 1 : -1, 0);
+                updateClipping();
+            });
+            
+            const zFolder = gui.addFolder('Z Clipping');
+            zFolder.add(clippingPlanes[2], 'constant', -10, 10).step(0.1).name('Position').onChange(updateClipping);
+            zFolder.add({ flip: false }, 'flip').name('Flip Direction').onChange((val) => {
+                clippingPlanes[2].normal.set(0, 0, val ? 1 : -1);
+                updateClipping();
+            });
+            
+            xFolder.open();
+            yFolder.open();
+            zFolder.open();
+
+            // Add lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
+            backLight.position.set(-1, -0.5, -1);
+            scene.add(backLight);
+
+            // Load the model
+            loadModel('model.glb');
+            
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize);
+            
+            // Start animation loop
+            animate();
+        }
+        
+        // Update clipping planes
+        function updateClipping() {
+            materials.forEach(mat => {
+                mat.clippingPlanes = clippingPlanes;
+                mat.needsUpdate = true;
+            });
+        }
+
+        // Toggle group controls visibility
+        function toggleGroupControls() {
+            const controls = document.getElementById('group-controls');
+            controls.style.display = controls.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Setup group visibility controls
+        function setupGroupControls() {
+            const container = document.getElementById('group-toggles');
+            container.innerHTML = '';
+            groupControls = {};
+            
+            // Find all groups in the model
+            model.traverse(child => {
+                if (child.isGroup || (child.isMesh && child.parent === model)) {
+                    const groupName = child.name || 'Unnamed Group';
+                    groupControls[groupName] = child;
+                    
+                    // Create toggle element
+                    const div = document.createElement('div');
+                    div.className = 'group-toggle';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = child.visible;
+                    checkbox.id = 'toggle-' + groupName.replace(/\s+/g, '-');
+                    checkbox.addEventListener('change', (e) => {
+                        child.visible = e.target.checked;
+                    });
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = checkbox.id;
+                    label.textContent = groupName;
+                    
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+                    container.appendChild(div);
+                }
+            });
+            
+            // Show the controls container
+            document.getElementById('group-controls').style.display = 'block';
+        }
+
+        // Load GLB model
+        function loadModel(modelPath) {
+            const loader = new THREE.GLTFLoader();
+            
+            loader.load(
+                modelPath,
+                function (gltf) {
+                    // Remove previous model if exists
+                    if (model) {
+                        scene.remove(model);
+                        model.traverse(child => {
+                            if (child.isMesh) {
+                                child.geometry.dispose();
+                                if (child.material) {
+                                    if (Array.isArray(child.material)) {
+                                        child.material.forEach(m => m.dispose());
+                                    } else {
+                                        child.material.dispose();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    
+                    model = gltf.scene;
+                    materials = [];
+                    
+                    // Process model materials
+                    model.traverse(child => {
+                        if (child.isMesh) {
+                            // Store material for clipping control
+                            if (Array.isArray(child.material)) {
+                                materials.push(...child.material);
+                            } else {
+                                materials.push(child.material);
+                            }
+                            
+                            // Enhance material with clipping support
+                            child.material = new THREE.MeshStandardMaterial({
+                                ...child.material,
+                                metalness: 0.2,
+                                roughness: 0.4,
+                                side: THREE.DoubleSide,
+                                clippingPlanes: clippingPlanes
+                            });
+                            
+                            // Add edges
+                            const edges = new THREE.EdgesGeometry(child.geometry, 15);
+                            const edgeMaterial = new THREE.LineBasicMaterial({ 
+                                color: 0x000000,
+                                linewidth: 1.5
+                            });
+                            const edgeLines = new THREE.LineSegments(edges, edgeMaterial);
+                            child.add(edgeLines);
+                        }
+                    });
+                    
+                    scene.add(model);
+                    
+                    // Calculate bounding box
+                    const box = new THREE.Box3().setFromObject(model);
+                    box.getCenter(modelCenter);
+                    box.getSize(modelSize);
+                    
+                    // Center the model
+                    model.position.sub(modelCenter);
+                    
+                    // Update GUI ranges based on model size
+                    gui.__folders['X Clipping'].__controllers[0].min(-modelSize.x/2).max(modelSize.x/2).step(modelSize.x/100);
+                    gui.__folders['Y Clipping'].__controllers[0].min(-modelSize.y/2).max(modelSize.y/2).step(modelSize.y/100);
+                    gui.__folders['Z Clipping'].__controllers[0].min(-modelSize.z/2).max(modelSize.z/2).step(modelSize.z/100);
+                    
+                    // Setup group controls
+                    setupGroupControls();
+                    
+                    // Calculate optimal camera distance
+                    const maxDim = Math.max(modelSize.x, modelSize.y, modelSize.z);
+                    const fov = camera.fov * (Math.PI / 180);
+                    let cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2)));
+                    cameraZ *= 1.3;
+                    
+                    // Position camera
+                    camera.position.set(-cameraZ, cameraZ * 0.7, -cameraZ);
+                    controls.target.copy(new THREE.Vector3(0, modelSize.y * 0.2, 0));
+                    controls.update();
+                    
+                    // Hide loading message
+                    document.getElementById('loading').style.display = 'none';
+                },
+                function (xhr) {
+                    const percent = (xhr.loaded / xhr.total * 100).toFixed(2);
+                    document.getElementById('loading').textContent = `Loading: ${percent}%`;
+                },
+                function (error) {
+                    console.error('Error loading model:', error);
+                    document.getElementById('loading').textContent = 'Error loading model';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = `Error: ${error.message || 'Failed to load model.glb'}`;
+                }
+            );
+        }
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        // Toggle wireframe mode
+        function toggleWireframe() {
+            isWireframe = !isWireframe;
+            materials.forEach(mat => {
+                mat.wireframe = isWireframe;
+            });
+        }
+        
+        // Reset camera position
+        function resetCamera() {
+            if (model) {
+                const maxDim = Math.max(modelSize.x, modelSize.y, modelSize.z);
+                const fov = camera.fov * (Math.PI / 180);
+                let cameraZ = Math.abs(maxDim / (2 * Math.tan(fov / 2))) * 1.3;
+                
+                camera.position.set(-cameraZ, cameraZ * 0.7, -cameraZ);
+                controls.target.copy(new THREE.Vector3(0, modelSize.y * 0.2, 0));
+                controls.update();
+            }
+        }
+        
+        // Initialize the application
+        window.onload = init;
+    </script>
+</body>
+</html>
