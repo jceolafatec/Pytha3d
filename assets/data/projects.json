@@ -353,6 +353,42 @@
   },
   {
     "source": "auto-model",
+    "asset_key": "models/office-kitchen",
+    "title": "Office Kitchen",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Office Kitchen.",
+    "image": "assets/models/Office-Kitchen/model_kitchen.png",
+    "model_path": "assets/models/Office-Kitchen/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
+    "asset_key": "models/small-kitchen",
+    "title": "Small Kitchen",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Small Kitchen.",
+    "image": "assets/models/Small-Kitchen/Model_Kitchen.png",
+    "model_path": "assets/models/Small-Kitchen/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
     "asset_key": "models/van-system",
     "title": "Van System",
     "meta": "3D Model · 2026",

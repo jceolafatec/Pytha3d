@@ -81,7 +81,7 @@ function init() {
     scene.background = new THREE.Color(0x111111);
 
     // Camera
-    camera = new THREE.PerspectiveCamera(100, width / height, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
     camera.position.set(initialCameraPosition.x, initialCameraPosition.y, initialCameraPosition.z);
 
     // Renderer
@@ -123,7 +123,7 @@ function init() {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.screenSpacePanning = false;
-    controls.minDistance = 1;
+    controls.minDistance = 0.5;
     controls.maxDistance = 50;
     controls.maxPolarAngle = Math.PI;
 
