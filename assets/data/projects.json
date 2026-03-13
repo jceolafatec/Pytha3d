@@ -299,12 +299,12 @@
   },
   {
     "source": "auto-model",
-    "asset_key": "models/1b",
-    "title": "1b",
+    "asset_key": "models/campervan-bed",
+    "title": "Campervan Bed",
     "meta": "3D Model · 2026",
-    "description": "Interactive 3D model for 1b.",
-    "image": "assets/models/1B/model_tile.png",
-    "model_path": "assets/models/1B/model.glb",
+    "description": "Interactive 3D model for Campervan Bed.",
+    "image": "assets/models/Campervan-bed/model.png",
+    "model_path": "assets/models/Campervan-bed/model.glb",
     "github_link": "",
     "demo_link": "",
     "tags": [
@@ -317,12 +317,12 @@
   },
   {
     "source": "auto-model",
-    "asset_key": "models/campervan-bed",
-    "title": "Campervan Bed",
+    "asset_key": "models/house-deck",
+    "title": "House Deck",
     "meta": "3D Model · 2026",
-    "description": "Interactive 3D model for Campervan Bed.",
-    "image": "assets/models/Campervan-bed/model.png",
-    "model_path": "assets/models/Campervan-bed/model.glb",
+    "description": "Interactive 3D model for House Deck.",
+    "image": "assets/models/House-Deck/model_tile.png",
+    "model_path": "assets/models/House-Deck/model.glb",
     "github_link": "",
     "demo_link": "",
     "tags": [
@@ -385,6 +385,24 @@
       "Auto Sync"
     ],
     "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
+    "asset_key": "models/timber-deck",
+    "title": "Timber Deck",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Timber Deck.",
+    "image": "assets/models/Timber-Deck/model-tile.png",
+    "model_path": "assets/models/Timber-Deck/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "5",
     "gallery_images": []
   },
   {
