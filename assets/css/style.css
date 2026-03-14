@@ -33,6 +33,15 @@
     text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.btn:focus-visible,
+.group-card-link:focus-visible {
+    outline: 2px solid #1f2937;
+    outline-offset: 3px;
+}
+
 /* Global reset-ish */
 
 *,
@@ -294,6 +303,33 @@ main {
     margin-bottom: var(--gap-lg);
 }
 
+.trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--gap-md);
+}
+
+.trust-card {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-soft);
+    padding: 1.1rem 1.2rem;
+    background: #fff;
+}
+
+.trust-value {
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 650;
+}
+
+.trust-label {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
 .two-column {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
@@ -520,6 +556,197 @@ main {
     color: var(--text-muted);
 }
 
+.contact-cta-row {
+    margin-top: 1.1rem;
+}
+
+.contact-compact-card {
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    background: #fff;
+    padding: 1rem;
+}
+
+.contact-compact-text {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* ===========================
+   Project assistant chatbot
+   =========================== */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.chatbot-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 45;
+}
+
+.chatbot-backdrop[hidden],
+.chatbot-panel[hidden] {
+    display: none !important;
+}
+
+.chatbot-panel {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    width: min(420px, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    display: grid;
+    grid-template-rows: auto minmax(180px, 1fr) auto auto auto auto;
+    overflow: hidden;
+    z-index: 50;
+}
+
+.chatbot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.chatbot-header h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.chatbot-close {
+    border: 0;
+    background: transparent;
+    color: var(--text-main);
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+}
+
+
+.contact-form-modal {
+    padding: 1rem;
+    overflow-y: auto;
+    display: grid;
+    gap: 0.85rem;
+}
+
+.contact-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.contact-form-field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.contact-form-field span {
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.contact-form-field input,
+.contact-form-field select,
+.contact-form-field textarea {
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 0.62rem 0.75rem;
+    font-size: 0.9rem;
+    font-family: inherit;
+    width: 100%;
+    background: #fff;
+    color: var(--text-main);
+}
+
+.contact-form-field input[type="file"] {
+    padding: 0.5rem 0.6rem;
+    background: #f8fafc;
+}
+
+.contact-form-field textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.contact-form-hint {
+    margin: 0;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+.contact-form-field-full {
+    grid-column: 1 / -1;
+}
+
+.contact-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.chatbot-note {
+    margin: 0;
+    padding: 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.chatbot-note[data-state="error"] {
+    color: #b3261e;
+}
+
+.chatbot-note[data-state="success"] {
+    color: #0a7a28;
+}
+
+.chatbot-email-link {
+    font-size: 0.82rem;
+    color: #0f5fbf;
+    text-decoration: underline;
+    width: fit-content;
+}
+
+@media (max-width: 640px) {
+    .contact-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .chatbot-panel {
+        right: 0.5rem;
+        left: 0.5rem;
+        bottom: 0.5rem;
+        width: auto;
+        max-height: calc(100vh - 1rem);
+    }
+}
+
 /* ===========================
    Filter Bar & Search
    =========================== */
@@ -551,7 +778,6 @@ main {
 }
 
 .search-input:focus {
-    outline: none;
     border-color: var(--text-main);
 }
 
