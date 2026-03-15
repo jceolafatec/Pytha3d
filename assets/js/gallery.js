@@ -12,6 +12,65 @@ function setFooterYear() {
     }
 }
 
+function initNav() {
+    const header = document.querySelector(".site-header");
+    const toggle = document.querySelector(".nav-toggle");
+
+    if (!header || !toggle) {
+        return;
+    }
+
+    toggle.addEventListener("click", () => {
+        const isOpen = header.classList.toggle("nav-open");
+        toggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    header.addEventListener("click", (event) => {
+        const link = event.target.closest("a");
+        if (!link) {
+            return;
+        }
+
+        if (header.classList.contains("nav-open")) {
+            header.classList.remove("nav-open");
+            toggle.setAttribute("aria-expanded", "false");
+        }
+    });
+}
+
+function updatePageMeta(title) {
+    const cleanTitle = String(title || "Gallery Group").trim();
+    const pageTitle = `${cleanTitle} - Gallery | Pytha Draftsman`;
+    const pageDescription = `${cleanTitle} project gallery from Pytha Draftsman.`;
+
+    document.title = pageTitle;
+
+    const description = document.querySelector('meta[name="description"]');
+    if (description) {
+        description.setAttribute("content", pageDescription);
+    }
+
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) {
+        ogTitle.setAttribute("content", pageTitle);
+    }
+
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) {
+        ogDescription.setAttribute("content", pageDescription);
+    }
+
+    const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twitterTitle) {
+        twitterTitle.setAttribute("content", pageTitle);
+    }
+
+    const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+    if (twitterDescription) {
+        twitterDescription.setAttribute("content", pageDescription);
+    }
+}
+
 function escapeHTML(text) {
     const map = {
         "&": "&amp;",
@@ -100,6 +159,8 @@ async function initGalleryPage() {
         if (title) {
             title.textContent = entry.title || requestedGroup;
         }
+        updatePageMeta(entry.title || requestedGroup);
+
         if (subtitle) {
             subtitle.textContent = `${images.length} image${images.length === 1 ? "" : "s"} in this folder.`;
         }
@@ -120,6 +181,12 @@ async function initGalleryPage() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (window.__PYTHA_GALLERY_INITIALIZED__) {
+        return;
+    }
+    window.__PYTHA_GALLERY_INITIALIZED__ = true;
+
     setFooterYear();
+    initNav();
     initGalleryPage();
 });
