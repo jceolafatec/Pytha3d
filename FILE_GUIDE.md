@@ -30,6 +30,12 @@ System: Enhanced Portfolio Management with 3D Model Support
 | **`tools/README_PRO.md`** | Complete user guide | End users |
 | **`IMPLEMENTATION_SUMMARY.md`** | What was built and why | Developers/Architects |
 | **`FILE_GUIDE.md`** | This file – directory of all files | Everyone |
+| **`GITHUB_PAGES_TROUBLESHOOTING.md`** | Custom-domain redirect loop checklist | Deployment / maintenance |
+
+### Deployment Diagnostics
+| File | Purpose | Run With |
+|------|---------|----------|
+| **`tools/check_pages_domain.py`** | Checks DNS and redirect chain for GitHub Pages custom domain issues | `python check_pages_domain.py --github-host jceolafatec.github.io` |
 
 ---
 
