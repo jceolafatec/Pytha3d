@@ -7,7 +7,6 @@ let ambientLight, directionalLight;
 let modelGroups = [];
 let initialCameraPosition = { x: 0, y: 2, z: 5 };
 let edgesVisible = true;
-let animationFrameId = null;
 
 function getErrorMessage(error) {
     if (!error) return '';
@@ -72,11 +71,6 @@ function patchImageLoaderWithPlaceholder() {
 // Initialize Three.js Scene
 // ====================================
 function init() {
-    if (window.__PYTHA_VIEWER_INIT_DONE__) {
-        return;
-    }
-    window.__PYTHA_VIEWER_INIT_DONE__ = true;
-
     const canvas = document.getElementById('model-canvas');
     const container = document.getElementById('viewer-container');
     const width = container.clientWidth;
@@ -134,7 +128,6 @@ function init() {
     controls.maxPolarAngle = Math.PI;
 
     // Handle window resize
-    window.removeEventListener('resize', onWindowResize, false);
     window.addEventListener('resize', onWindowResize, false);
 
     // Start animation loop
@@ -145,17 +138,7 @@ function init() {
 // Animation Loop
 // ====================================
 function animate() {
-    if (animationFrameId !== null) {
-        return;
-    }
-
-    const loop = () => {
-        animationFrameId = requestAnimationFrame(loop);
-        controls.update();
-        renderer.render(scene, camera);
-    };
-
-    animationFrameId = requestAnimationFrame(loop);
+    requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
 }
@@ -431,24 +414,13 @@ function getUrlParam(param) {
     return urlParams.get(param);
 }
 
-function bindControls() {
-    const btnEdges = document.getElementById('btn-edges');
-    const btnWire = document.getElementById('btn-wire');
-    const btnReset = document.getElementById('btn-reset');
-    const btnParts = document.getElementById('btn-parts');
-
-    if (btnEdges) btnEdges.addEventListener('click', toggleEdges);
-    if (btnWire) btnWire.addEventListener('click', toggleWireframe);
-    if (btnReset) btnReset.addEventListener('click', resetCamera);
-    if (btnParts) btnParts.addEventListener('click', toggleGroupControls);
-}
-
 // ====================================
 // Load Project Data & Model Info
 // ====================================
 async function loadProjectData() {
     try {
         const modelPath = getUrlParam('model');
+        const projectId = getUrlParam('id');
 
         if (!modelPath) {
             throw new Error('No model path specified in URL');
@@ -458,11 +430,16 @@ async function loadProjectData() {
         const response = await fetch('assets/data/projects.json');
         if (response.ok) {
             const projects = await response.json();
-            const project = projects.find(p => p.model_path === modelPath);
+            const project = projectId 
+                ? projects.find(p => p.id === projectId)
+                : projects.find(p => p.model_path === modelPath);
 
             if (project) {
                 document.getElementById('modelTitle').textContent = project.title || 'Untitled Model';
                 document.getElementById('modelDescription').textContent = project.description || '';
+                
+                // Load related models (exclude current)
+                loadRelatedModels(projects.filter(p => p.id !== project.id && p.model_path));
             } else {
                 // Fallback if project not found
                 document.getElementById('modelTitle').textContent = '3D Model Viewer';
@@ -484,15 +461,40 @@ async function loadProjectData() {
 }
 
 // ====================================
+// Load Related Models
+// ====================================
+function loadRelatedModels(projects) {
+    const container = document.getElementById('relatedModels');
+    if (!container || projects.length === 0) {
+        return;
+    }
+
+    container.innerHTML = '';
+    
+    // Show max 3 related models
+    projects.slice(0, 3).forEach(project => {
+        const card = document.createElement('div');
+        card.className = 'model-card';
+        
+        const img = project.image 
+            ? `<img src="${project.image}" alt="${project.title}">`
+            : `<div class="model-thumbnail-placeholder">No Image</div>`;
+        
+        card.innerHTML = `
+            <a href="project-detail.html?model=${project.model_path}&id=${project.id}">
+                ${img}
+                <h3>${project.title}</h3>
+            </a>
+        `;
+        
+        container.appendChild(card);
+    });
+}
+
+// ====================================
 // Initialize on Page Load
 // ====================================
 window.addEventListener('DOMContentLoaded', () => {
-    if (window.__PYTHA_VIEWER_BOOTSTRAPPED__) {
-        return;
-    }
-    window.__PYTHA_VIEWER_BOOTSTRAPPED__ = true;
-
-    bindControls();
     init();
     loadProjectData();
 });

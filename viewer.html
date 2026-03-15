@@ -4,17 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>3D Model Viewer – Pytha Draftsman</title>
-    <meta name="description" content="Interactive 3D model viewer for PYTHA project files with orbit, edge and wireframe controls." />
-    <meta property="og:title" content="3D Model Viewer - Pytha Draftsman" />
-    <meta property="og:description" content="Inspect joinery and construction models interactively in your browser." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://jceola.com/viewer.html" />
-    <meta property="og:image" content="https://jceola.com/assets/img/project-01.jpg" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="3D Model Viewer - Pytha Draftsman" />
-    <meta name="twitter:description" content="Inspect joinery and construction models interactively in your browser." />
-    <meta name="twitter:image" content="https://jceola.com/assets/img/project-01.jpg" />
-    <link rel="canonical" href="https://jceola.com/viewer.html" />
     <style>
         *, *::before, *::after { box-sizing: border-box; }
 
@@ -222,10 +211,10 @@
 
     <!-- Bottom controls bar -->
     <div id="controls-bar">
-        <button class="ctrl-btn active" id="btn-edges" type="button">Edges: On</button>
-        <button class="ctrl-btn" id="btn-wire" type="button">Wireframe</button>
-        <button class="ctrl-btn" id="btn-reset" type="button">Reset View</button>
-        <button class="ctrl-btn" id="btn-parts" type="button">Parts</button>
+        <button class="ctrl-btn active" id="btn-edges" onclick="toggleEdges()">Edges: On</button>
+        <button class="ctrl-btn" id="btn-wire" onclick="toggleWireframe()">Wireframe</button>
+        <button class="ctrl-btn" onclick="resetCamera()">Reset View</button>
+        <button class="ctrl-btn" onclick="toggleGroupControls()">Parts</button>
     </div>
 
     <!-- Overlays -->
@@ -234,12 +223,12 @@
     <p id="orbit-hint">Drag to rotate &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Right-drag to pan</p>
 
     <!-- Three.js r128 -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.min.js"></script>
 
     <!-- Portfolio viewer logic (with edge-line support) -->
-    <script defer src="assets/js/viewer.js"></script>
+    <script src="assets/js/viewer.js"></script>
 
     <!-- Fade orbit hint after 4 s -->
     <script>
