@@ -190,11 +190,11 @@
                 <div>
                     <div class="contact-compact-card">
                         <p class="contact-compact-text">
-                            Start a project discussion in a private popup form.
-                            Share your brief, measurements, and plans in one place.
+                            Get in touch directly for project enquiries, drafting work, or collaboration.
                         </p>
                         <div class="contact-cta-row">
-                            <button type="button" id="open-chatbot" class="btn primary">Start a Project Discussion</button>
+                            <a href="mailto:jceola.fatec@gmail.com" class="btn primary">jceola.fatec@gmail.com</a>
+                            <a href="https://www.linkedin.com/in/jeferson-ceola/" class="btn ghost" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                         </div>
                     </div>
                 </div>
@@ -209,93 +209,7 @@
         </div>
     </footer>
 
-    <div id="contact-backdrop" class="chatbot-backdrop" hidden></div>
-    <aside
-        id="contact-panel"
-        class="chatbot-panel"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="contact-title"
-        aria-hidden="true"
-        hidden
-    >
-        <div class="chatbot-header">
-            <h3 id="contact-title">Start a Project Discussion</h3>
-            <button type="button" id="close-contact" class="chatbot-close" aria-label="Close contact form">×</button>
-        </div>
-
-        <form id="contact-form" class="contact-form-modal" novalidate>
-            <div class="contact-form-grid">
-                <label class="contact-form-field">
-                    <span>Name</span>
-                    <input id="contact-name" name="name" type="text" maxlength="80" required />
-                </label>
-
-                <label class="contact-form-field">
-                    <span>Email</span>
-                    <input id="contact-email" name="email" type="email" maxlength="120" required />
-                </label>
-
-                <label class="contact-form-field">
-                    <span>Phone (optional)</span>
-                    <input id="contact-phone" name="phone" type="text" maxlength="40" />
-                </label>
-
-                <label class="contact-form-field">
-                    <span>Project Type</span>
-                    <select id="contact-project-type" name="projectType" required>
-                        <option value="">Select one</option>
-                        <option>Kitchen Joinery</option>
-                        <option>Retail Fitout</option>
-                        <option>Reception / Office</option>
-                        <option>3D Model + Documentation</option>
-                        <option>Other</option>
-                    </select>
-                </label>
-
-                <label class="contact-form-field">
-                    <span>Timeline</span>
-                    <input id="contact-timeline" name="timeline" type="text" maxlength="100" placeholder="e.g. Need first draft in 2 weeks" />
-                </label>
-
-                <label class="contact-form-field">
-                    <span>Budget Range</span>
-                    <input id="contact-budget" name="budget" type="text" maxlength="100" placeholder="e.g. $2,000-$5,000" />
-                </label>
-            </div>
-
-            <label class="contact-form-field contact-form-field-full">
-                <span>Project Brief</span>
-                <textarea id="contact-brief" name="brief" rows="5" maxlength="1200" placeholder="Tell me what you need, location, dimensions, and available files." required></textarea>
-            </label>
-
-            <label class="contact-form-field contact-form-field-full">
-                <span>Measurements / Site Photos</span>
-                <input id="contact-measurements" name="measurementsFiles" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.heic,.dwg,.dxf,.zip" />
-                <small class="contact-form-hint">Upload marked-up dimensions, site photos, sketches, or reference PDFs.</small>
-            </label>
-
-            <label class="contact-form-field contact-form-field-full">
-                <span>Plans / Drawings</span>
-                <input id="contact-plans" name="planFiles" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.heic,.dwg,.dxf,.zip" />
-                <small class="contact-form-hint">Attach floor plans, elevations, shop drawings, or packaged CAD exports.</small>
-            </label>
-
-            <div class="contact-form-actions">
-                <button type="submit" class="btn primary">Send Inquiry</button>
-            </div>
-            <p id="contact-form-feedback" class="chatbot-note" role="status" aria-live="polite"></p>
-        </form>
-    </aside>
-
     <!-- Main JS -->
-    <script>
-        window.PYTHA_CONTACT_UPLOAD_CONFIG = {
-            webAppUrl: "https://script.google.com/macros/s/AKfycbzYrYAKTniA2_QLqlGAdYXoPuaYCDwZMHdyTx8xC9F2A4TPukY3cFH565k5XHPfRHCcDg/exec",
-            publicToken: "4c5f7g8h910a8f9e2d1d4c5f7g8h910f9e2d1d4c5f4c5f7g8h910a8f9e2d1d4c5f7g8h910f9e2d1d4c5f"
-        };
-    </script>
-    <script src="assets/js/upload.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html>
