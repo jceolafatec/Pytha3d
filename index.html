@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pytha Draftsman – 3D CAD & Construction Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="PYTHA 3D CAD specialist creating precise, build-ready documentation for joinery, cabinetry, and construction projects." />
+
+    <!-- Typography: system fonts for speed & Japanese-friendly fallback -->
+    <style>
+        :root {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         "Noto Sans JP", sans-serif;
+        }
+    </style>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+    <!-- Skip link for accessibility -->
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <!-- Header / Navigation -->
+    <header class="site-header">
+        <div class="shell header-inner">
+            <a href="#top" class="logo" aria-label="Go to top">
+                <span class="logo-mark"></span>
+                <span class="logo-text">Pytha Draftsman</span>
+            </a>
+
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="nav-toggle-line"></span>
+                <span class="nav-toggle-line"></span>
+            </button>
+
+            <nav class="site-nav" aria-label="Main navigation">
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#three-d">3D Models</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="top" class="section section-hero">
+            <div class="shell hero-inner">
+                <div class="hero-text">
+                    <p class="eyebrow">Portfolio</p>
+                    <h1>Built With Precision</h1>
+                    <p class="hero-subtitle">
+                        I specialise in 3D CAD modelling using PYTHA, creating accurate and build-ready
+                        documentation for joinery and construction projects. My work bridges design and
+                        fabrication, ensuring every detail is practical, precise, and ready for production.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#projects" class="btn primary">View Projects</a>
+                        <a href="#contact" class="btn ghost">Get in Touch</a>
+                    </div>
+                </div>
+                <div class="hero-meta">
+                    <div class="hero-card">
+                        <p class="hero-label">Expertise</p>
+                        <p class="hero-value">PYTHA 3D CAD · Joinery · Construction Detailing</p>
+                    </div>
+                    <div class="hero-card">
+                        <p class="hero-label">Location</p>
+                        <p class="hero-value">Gold Coast, QLD Australia</p>
+                    </div>
+                    <div class="hero-card">
+                        <p class="hero-label">Availability</p>
+                        <p class="hero-value">Open to new projects</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section section-muted">
+            <div class="shell two-column">
+                <div>
+                    <h2>About</h2>
+                </div>
+                <div>
+                    <p>
+                        I am a highly motivated draftsperson professional with extensive experience in managing
+                        all aspects of construction projects from pre-construction to completion. I excel in overseeing
+                        the construction phase, development process, project scheduling, maintenance, and necessary
+                        adjustments to ensure project success.
+                    </p>
+                    <p>
+                        My ability to plan and prioritize tasks demonstrates excellent time management skills,
+                        ensuring competence and accuracy throughout the project lifecycle. I specialise in PYTHA 3D CAD
+                        modelling, cabinetry and joinery design, construction detailing, and commercial shopfitting,
+                        delivering build-ready documentation that translates vision into reality.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Portfolio Section -->
+        <section id="projects" class="section">
+            <div class="shell">
+                <div class="section-heading">
+                    <h2>Gallery Portfolio</h2>
+                    <p class="section-subtitle">
+                        Click a category to explore the full project gallery.
+                    </p>
+                </div>
+                <div id="content-grid" class="project-grid"></div>
+            </div>
+        </section>
+
+        <!-- 3D Model Portfolio Section -->
+        <section id="three-d" class="section section-muted">
+            <div class="shell">
+                <div class="section-heading">
+                    <h2>3D Model Portfolio</h2>
+                    <p class="section-subtitle">
+                        Interactive 3D models — click any tile to explore and rotate in your browser.
+                    </p>
+                </div>
+                <div id="models-grid" class="project-grid"></div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="shell two-column">
+                <div>
+                    <h2>Contact</h2>
+                </div>
+                <div>
+                    <p>
+                        Ready to collaborate, ask questions, or request more work samples?
+                        Reach out using the details below.
+                    </p>
+                    <ul class="contact-list">
+                        <li><span>Email</span><a href="mailto:jceola.fatec@gmail.com">jceola.fatec@gmail.com</a></li>
+                        <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/jeferson-ceola/" target="_blank" rel="noreferrer">Jeferson Ceola</a></li>
+                        <li><span>Portfolio</span><a href="https://jceola.com/" target="_blank" rel="noreferrer">jceola.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="shell footer-inner">
+            <p class="footer-text">© <span id="year"></span> Pytha Draftsman. All rights reserved. Gold Coast, QLD.</p>
+        </div>
+    </footer>
+
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
