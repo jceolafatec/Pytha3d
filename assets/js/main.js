@@ -233,11 +233,6 @@ function initSmoothScroll() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (window.__PYTHA_MAIN_INITIALIZED__) {
-        return;
-    }
-    window.__PYTHA_MAIN_INITIALIZED__ = true;
-
     setFooterYear();
     initNav();
     initSmoothScroll();
