@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV – Jeferson Ceola</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #ffffff;
+    }
+
+    /* ── Page geometry ────────────────────────────────────── */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 18mm 20mm;
+      background: #ffffff;
+      page-break-after: always;
+      position: relative;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* ── PAGE 1 – Header / personal info ──────────────────── */
+    .page-header {
+      text-align: center;
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 10mm;
+      margin-bottom: 8mm;
+    }
+
+    .page-header h1 {
+      font-size: 26pt;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .page-header .title {
+      font-size: 12pt;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #444;
+      margin-top: 3mm;
+    }
+
+    .contact-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6mm;
+      margin-top: 5mm;
+      font-size: 10pt;
+      color: #333;
+    }
+
+    .contact-row a {
+      color: #1a1a1a;
+      text-decoration: none;
+    }
+
+    /* ── Section on page 1 ────────────────────────────────── */
+    .section {
+      margin-bottom: 8mm;
+    }
+
+    .section-title {
+      font-size: 11pt;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #1a1a1a;
+      padding-bottom: 1.5mm;
+      margin-bottom: 4mm;
+    }
+
+    .section p {
+      line-height: 1.65;
+      text-align: justify;
+    }
+
+    /* Skills grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2mm 8mm;
+      margin-top: 2mm;
+    }
+
+    .skill-item {
+      font-size: 10.5pt;
+      padding: 1mm 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* Education */
+    .edu-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3mm;
+    }
+
+    .edu-entry .edu-left { flex: 1; }
+    .edu-entry .edu-right { text-align: right; white-space: nowrap; font-size: 10pt; color: #555; }
+
+    .edu-entry strong { font-size: 11pt; }
+    .edu-entry .institution { font-size: 10pt; color: #444; margin-top: 1mm; }
+
+    /* ── PAGE 2+ – Experience pages ───────────────────────── */
+    .experience-page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 18mm 20mm;
+      background: #ffffff;
+      page-break-after: always;
+      text-align: center;
+    }
+
+    .experience-page:last-child {
+      page-break-after: auto;
+    }
+
+    .exp-page-heading {
+      font-size: 14pt;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 4mm;
+      margin-bottom: 10mm;
+    }
+
+    /* Company block */
+    .company-block {
+      text-align: center;
+      margin-bottom: 10mm;
+      padding-bottom: 8mm;
+      border-bottom: 1px solid #cccccc;
+    }
+
+    .company-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .company-name {
+      font-size: 15pt;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1mm;
+    }
+
+    .company-meta {
+      font-size: 10.5pt;
+      color: #555;
+      margin-bottom: 4mm;
+      font-style: italic;
+    }
+
+    .role-entry {
+      margin-bottom: 5mm;
+    }
+
+    .role-title {
+      font-size: 12pt;
+      font-weight: 700;
+      margin-bottom: 1mm;
+    }
+
+    .role-period {
+      font-size: 10pt;
+      color: #666;
+      margin-bottom: 3mm;
+    }
+
+    .role-duties {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 10.5pt;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .role-duties li::before {
+      content: "– ";
+      color: #888;
+    }
+
+    /* ── Print rules ──────────────────────────────────────── */
+    @media print {
+      body {
+        background: #ffffff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .page,
+      .experience-page {
+        margin: 0;
+        padding: 18mm 20mm;
+        width: 210mm;
+        min-height: 297mm;
+        page-break-after: always;
+        box-shadow: none;
+      }
+
+      .page:last-child,
+      .experience-page:last-child {
+        page-break-after: auto;
+      }
+    }
+
+    /* Screen-only shadow so pages look distinct on screen */
+    @media screen {
+      .page, .experience-page {
+        box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+        margin-bottom: 10mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE 1 – Personal Information
+  ═══════════════════════════════════════════════════════ -->
+  <div class="page">
+
+    <!-- Name & title -->
+    <div class="page-header">
+      <h1>Jeferson Ceola</h1>
+      <p class="title">PYTHA 3D CAD Specialist &nbsp;·&nbsp; Draftsperson &nbsp;·&nbsp; Joinery Designer</p>
+      <div class="contact-row">
+        <span>📍 Gold Coast, QLD, Australia</span>
+        <span>✉ <a href="mailto:jceola.fatec@gmail.com">jceola.fatec@gmail.com</a></span>
+        <span>🔗 <a href="https://www.linkedin.com/in/jeferson-ceola/" target="_blank">linkedin.com/in/jeferson-ceola</a></span>
+        <span>🌐 <a href="https://jceola.com" target="_blank">jceola.com</a></span>
+      </div>
+    </div>
+
+    <!-- Professional Summary -->
+    <div class="section">
+      <h2 class="section-title">Professional Summary</h2>
+      <p>
+        Highly motivated draftsperson professional with extensive experience managing all aspects of
+        construction and joinery projects from pre-construction through to completion. Specialist in
+        PYTHA 3D CAD modelling, producing accurate, build-ready shop drawings and 3D visualisations
+        for commercial joinery, cabinetry, shopfitting, and fit-out projects. Proven ability to
+        translate complex design briefs into precise, fabrication-ready documentation while maintaining
+        tight deadlines and quality standards.
+      </p>
+    </div>
+
+    <!-- Core Skills -->
+    <div class="section">
+      <h2 class="section-title">Core Skills</h2>
+      <div class="skills-grid">
+        <span class="skill-item">PYTHA 3D CAD Modelling</span>
+        <span class="skill-item">Shop Drawing Production</span>
+        <span class="skill-item">Commercial Joinery Design</span>
+        <span class="skill-item">Cabinet & Furniture Design</span>
+        <span class="skill-item">Construction Detailing</span>
+        <span class="skill-item">Shopfront &amp; Fit-out Design</span>
+        <span class="skill-item">3D Visualisation / Rendering</span>
+        <span class="skill-item">AutoCAD</span>
+        <span class="skill-item">Microsoft Office Suite</span>
+        <span class="skill-item">Project Coordination</span>
+        <span class="skill-item">Client Communication</span>
+        <span class="skill-item">Attention to Detail</span>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="section">
+      <h2 class="section-title">Education</h2>
+
+      <div class="edu-entry">
+        <div class="edu-left">
+          <strong>Certificate IV in Design – Furniture &amp; Interior Spaces</strong>
+          <p class="institution">TAFE Queensland, Gold Coast</p>
+        </div>
+        <div class="edu-right">Completed 2019</div>
+      </div>
+
+      <div class="edu-entry">
+        <div class="edu-left">
+          <strong>Bachelor of Architecture</strong>
+          <p class="institution">FATEC – Faculdade de Tecnologia, São Paulo, Brazil</p>
+        </div>
+        <div class="edu-right">Completed 2012</div>
+      </div>
+    </div>
+
+    <!-- Certifications / Software -->
+    <div class="section">
+      <h2 class="section-title">Certifications &amp; Software Proficiency</h2>
+      <div class="skills-grid">
+        <span class="skill-item">PYTHA 3D CAD (Advanced)</span>
+        <span class="skill-item">AutoCAD (Intermediate)</span>
+        <span class="skill-item">SketchUp (Intermediate)</span>
+        <span class="skill-item">Adobe Illustrator</span>
+        <span class="skill-item">Microsoft Excel &amp; Word</span>
+        <span class="skill-item">Google Workspace</span>
+      </div>
+    </div>
+
+  </div><!-- end page 1 -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE 2 – Work Experience (Companies 1 & 2)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="experience-page">
+
+    <h2 class="exp-page-heading">Work Experience</h2>
+
+    <!-- Company 1 -->
+    <div class="company-block">
+      <p class="company-name">DDA Group</p>
+      <p class="company-meta">Gold Coast, QLD, Australia</p>
+
+      <div class="role-entry">
+        <p class="role-title">Senior PYTHA Draftsperson / 3D Designer</p>
+        <p class="role-period">March 2021 – Present</p>
+        <ul class="role-duties">
+          <li>Produced PYTHA 3D shop drawings and detailed construction documentation for commercial joinery and medical fit-outs.</li>
+          <li>Designed and modelled reception counters, island benches, waiting area wall panels, and booth seating for healthcare facilities.</li>
+          <li>Collaborated with project managers, fabricators, and site teams to ensure documentation aligned with build requirements.</li>
+          <li>Developed kitchen cabinetry and laboratory credenza models to meet specific functional and aesthetic briefs.</li>
+          <li>Maintained drawing register and managed file revisions using a structured version-control system.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Company 2 -->
+    <div class="company-block">
+      <p class="company-name">JB Shopfitting &amp; Interiors</p>
+      <p class="company-meta">Brisbane, QLD, Australia</p>
+
+      <div class="role-entry">
+        <p class="role-title">PYTHA CAD Draftsperson</p>
+        <p class="role-period">June 2019 – February 2021</p>
+        <ul class="role-duties">
+          <li>Created 3D models and shop drawings for retail shopfronts, display fixtures, and bulkhead installations.</li>
+          <li>Produced accurate construction drawings for high-volume retail clients including fashion and lifestyle brands.</li>
+          <li>Coordinated with the estimating team to ensure materials were correctly specified in cut lists.</li>
+          <li>Assisted in site surveys and interpreted architectural drawings to develop precise fabrication documentation.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- end page 2 -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE 3 – Work Experience (Companies 3 & 4)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="experience-page">
+
+    <h2 class="exp-page-heading">Work Experience <span style="font-size:10pt;font-weight:400;">(continued)</span></h2>
+
+    <!-- Company 3 -->
+    <div class="company-block">
+      <p class="company-name">CN Fixtures &amp; Display</p>
+      <p class="company-meta">Sydney, NSW, Australia</p>
+
+      <div class="role-entry">
+        <p class="role-title">3D CAD Drafter – Retail Fixtures</p>
+        <p class="role-period">January 2018 – May 2019</p>
+        <ul class="role-duties">
+          <li>Modelled bespoke retail display fixtures including tee-tables, rotating tile displays, and ottomans using PYTHA.</li>
+          <li>Produced detailed assembly drawings and cut lists to support the manufacturing and installation teams.</li>
+          <li>Participated in design reviews with clients to refine fixture layouts and improve space utilisation.</li>
+          <li>Ensured all drawings met Australian Standards for commercial joinery and retail fit-outs.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Company 4 -->
+    <div class="company-block">
+      <p class="company-name">2 Storey Tavern Group</p>
+      <p class="company-meta">Gold Coast, QLD, Australia</p>
+
+      <div class="role-entry">
+        <p class="role-title">Junior Draftsperson – Hospitality Joinery</p>
+        <p class="role-period">July 2016 – December 2017</p>
+        <ul class="role-duties">
+          <li>Drafted 3D models and shop drawings for front bar gantries, back bar shelving, banquette seating, and dry bars.</li>
+          <li>Assisted the lead designer in developing concept designs for sports bar and bistro renovation projects.</li>
+          <li>Prepared documentation packages for council and contractor review.</li>
+          <li>Supported on-site installation teams with as-built drawing updates and RFI responses.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- end page 3 -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       PAGE 4 – Work Experience (Company 5) + Referees
+  ═══════════════════════════════════════════════════════ -->
+  <div class="experience-page">
+
+    <h2 class="exp-page-heading">Work Experience <span style="font-size:10pt;font-weight:400;">(continued)</span></h2>
+
+    <!-- Company 5 -->
+    <div class="company-block">
+      <p class="company-name">YD Design &amp; Construction</p>
+      <p class="company-meta">Melbourne, VIC, Australia</p>
+
+      <div class="role-entry">
+        <p class="role-title">Architectural Draftsperson</p>
+        <p class="role-period">March 2014 – June 2016</p>
+        <ul class="role-duties">
+          <li>Produced shopfront and bulkhead documentation for high-street retail chains across Victoria.</li>
+          <li>Managed multiple concurrent drawing packages, ensuring timely delivery to construction teams.</li>
+          <li>Liaised with clients and contractors to resolve design queries and coordinate changes.</li>
+          <li>Gained experience in commercial construction methods, materials, and Australian building codes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Referees -->
+    <div style="margin-top:14mm; border-top:1px solid #1a1a1a; padding-top:6mm;">
+      <h2 style="font-size:11pt; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:4mm;">Referees</h2>
+      <p style="font-size:10.5pt; color:#444;">References available upon request.</p>
+    </div>
+
+  </div><!-- end page 4 -->
+
+</body>
+</html>
