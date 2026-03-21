@@ -1,61 +1,5 @@
 [
   {
-    "title": "3D Model Showcase",
-    "meta": "3D Visualization · 2025",
-    "description": "Interactive 3D model viewer with full rotation and zoom capabilities. Demonstrates WebGL rendering using Three.js.",
-    "image": "assets/img/project-01.jpg",
-    "model_path": "assets/models/model.glb",
-    "github_link": "https://github.com/yourusername/project-01",
-    "demo_link": "project-detail.html?model=assets/models/model-01.glb",
-    "tags": [
-      "3D",
-      "WebGL",
-      "Three.js",
-      "Interactive"
-    ],
-    "id": "1",
-    "source": "",
-    "asset_key": "",
-    "gallery_images": []
-  },
-  {
-    "id": "2",
-    "title": "Portfolio Manager",
-    "meta": "Python GUI · 2025",
-    "description": "Desktop application for managing portfolio projects with drag-and-drop file support and automatic asset organization.",
-    "image": "assets/img/project-02.jpg",
-    "model_path": "",
-    "github_link": "https://github.com/yourusername/portfolio-manager",
-    "demo_link": "",
-    "tags": [
-      "Python",
-      "Tkinter",
-      "Desktop App"
-    ],
-    "source": "",
-    "asset_key": "",
-    "gallery_images": []
-  },
-  {
-    "id": "3",
-    "title": "Web-based 3D Viewer",
-    "meta": "Web App · 2025",
-    "description": "Browser-based tool for visualizing GLB and GLTF 3D models with multiple lighting options and export functionality.",
-    "image": "assets/img/project-03.jpg",
-    "model_path": "assets/models/model-03.glb",
-    "github_link": "https://github.com/yourusername/web-viewer",
-    "demo_link": "project-detail.html?model=assets/models/model-03.glb",
-    "tags": [
-      "Web",
-      "WebGL",
-      "3D Viewer",
-      "JavaScript"
-    ],
-    "source": "",
-    "asset_key": "",
-    "gallery_images": []
-  },
-  {
     "source": "auto-content",
     "asset_key": "content/kitchen",
     "title": "Kitchen",
@@ -80,7 +24,7 @@
       "assets/content/Kitchen/Laundry.png",
       "assets/content/Kitchen/Laundry2.png"
     ],
-    "id": "4"
+    "id": 1
   },
   {
     "source": "auto-content",
@@ -103,7 +47,7 @@
       "assets/content/Laboratory/J11 Nurses Credenza_R012.png",
       "assets/content/Laboratory/J12 PROCEDURE ROOM_R01.png"
     ],
-    "id": "5"
+    "id": 2
   },
   {
     "source": "auto-content",
@@ -136,7 +80,7 @@
       "assets/content/Office/STECCAWOOD SCREEN WALL.png",
       "assets/content/Office/STECCAWOOD SCREEN WALL2.png"
     ],
-    "id": "4"
+    "id": 3
   },
   {
     "source": "auto-content",
@@ -157,7 +101,7 @@
       "assets/content/Panel Wall/DDA HKS - KITCHEN WALL PANEL.png",
       "assets/content/Panel Wall/JB_Shop2.png"
     ],
-    "id": "6"
+    "id": 4
   },
   {
     "source": "auto-content",
@@ -182,7 +126,7 @@
       "assets/content/Reception/J01 J02 Reception Desk_R09.png",
       "assets/content/Reception/J01 J02 Reception Desk_R092.png"
     ],
-    "id": "7"
+    "id": 5
   },
   {
     "source": "auto-content",
@@ -208,7 +152,7 @@
       "assets/content/receptiondesk/DDA HKS - RECEPTION COUNTER_4.jpg",
       "assets/content/receptiondesk/Designer.png"
     ],
-    "id": "11"
+    "id": 6
   },
   {
     "source": "auto-content",
@@ -235,7 +179,7 @@
       "assets/content/Retail Features/Rotative Tile Display.png",
       "assets/content/Retail Features/Rotative Tile Display2.png"
     ],
-    "id": "8"
+    "id": 7
   },
   {
     "source": "auto-content",
@@ -263,7 +207,7 @@
       "assets/content/Shopfront/YD NORTHLAND VIC_SF2.png",
       "assets/content/Shopfront/YD NORTHLAND VIC_SF3.png"
     ],
-    "id": "9"
+    "id": 8
   },
   {
     "source": "auto-content",
@@ -295,7 +239,7 @@
       "assets/content/Tavern/3ST_ Bistro Existing Booth + Screen + Pergola.png",
       "assets/content/Tavern/3ST_ Bistro Existing Booth + Screen + Pergola2.png"
     ],
-    "id": "5"
+    "id": 9
   },
   {
     "source": "auto-model",
@@ -312,7 +256,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "4",
+    "id": 10,
     "gallery_images": []
   },
   {
@@ -330,7 +274,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "4",
+    "id": 11,
     "gallery_images": []
   },
   {
@@ -348,7 +292,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "4",
+    "id": 12,
     "gallery_images": []
   },
   {
@@ -366,7 +310,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "4",
+    "id": 13,
     "gallery_images": []
   },
   {
@@ -384,7 +328,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "4",
+    "id": 14,
     "gallery_images": []
   },
   {
@@ -402,7 +346,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "5",
+    "id": 15,
     "gallery_images": []
   },
   {
@@ -420,7 +364,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "4",
+    "id": 16,
     "gallery_images": []
   },
   {
@@ -438,7 +382,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "8",
+    "id": 17,
     "gallery_images": []
   },
   {
@@ -456,7 +400,7 @@
       "Model",
       "Auto Sync"
     ],
-    "id": "9",
+    "id": 18,
     "gallery_images": []
   }
 ]
