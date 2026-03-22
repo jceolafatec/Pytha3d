@@ -57,6 +57,28 @@
   },
   {
     "source": "auto-content",
+    "asset_key": "content/island bench",
+    "title": "Island Bench",
+    "meta": "Project Gallery · 2026",
+    "description": "Gallery assets for Island Bench.",
+    "image": "assets/content/Island Bench/Island_bench_1.png",
+    "model_path": "",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "Gallery",
+      "Content",
+      "Auto Sync"
+    ],
+    "gallery_images": [
+      "assets/content/Island Bench/Island_bench_1.png",
+      "assets/content/Island Bench/Island_bench_2.png",
+      "assets/content/Island Bench/Island_bench_3.png"
+    ],
+    "id": "5"
+  },
+  {
+    "source": "auto-content",
     "asset_key": "content/kitchen",
     "title": "Kitchen",
     "meta": "Project Gallery · 2026",
@@ -81,6 +103,27 @@
       "assets/content/Kitchen/Laundry2.png"
     ],
     "id": "4"
+  },
+  {
+    "source": "auto-content",
+    "asset_key": "content/kitchenette",
+    "title": "Kitchenette",
+    "meta": "Project Gallery · 2026",
+    "description": "Gallery assets for Kitchenette.",
+    "image": "assets/content/Kitchenette/Kitchenette_0.png",
+    "model_path": "",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "Gallery",
+      "Content",
+      "Auto Sync"
+    ],
+    "gallery_images": [
+      "assets/content/Kitchenette/Kitchenette_0.png",
+      "assets/content/Kitchenette/Kitchenette_1.png"
+    ],
+    "id": "6"
   },
   {
     "source": "auto-content",
@@ -135,6 +178,27 @@
       "assets/content/Office/JO4b - Kitchen2.png",
       "assets/content/Office/STECCAWOOD SCREEN WALL.png",
       "assets/content/Office/STECCAWOOD SCREEN WALL2.png"
+    ],
+    "id": "4"
+  },
+  {
+    "source": "auto-content",
+    "asset_key": "content/ottoman seat",
+    "title": "Ottoman Seat",
+    "meta": "Project Gallery · 2026",
+    "description": "Gallery assets for Ottoman Seat.",
+    "image": "assets/content/Ottoman Seat/Ottoman.png",
+    "model_path": "",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "Gallery",
+      "Content",
+      "Auto Sync"
+    ],
+    "gallery_images": [
+      "assets/content/Ottoman Seat/Ottoman.png",
+      "assets/content/Ottoman Seat/Ottoman2.png"
     ],
     "id": "4"
   },
@@ -229,9 +293,6 @@
       "assets/content/Retail Features/CN_Fixtures_TeeTable.png",
       "assets/content/Retail Features/CN_Fixtures_TeeTable2.png",
       "assets/content/Retail Features/CN_Fixtures_TeeTable3.png",
-      "assets/content/Retail Features/DDA HKS - TYPICAL RECEPTION WITH SECRET DOOR2.png",
-      "assets/content/Retail Features/Ottoman.png",
-      "assets/content/Retail Features/Ottoman2.png",
       "assets/content/Retail Features/Rotative Tile Display.png",
       "assets/content/Retail Features/Rotative Tile Display2.png"
     ],
@@ -299,12 +360,66 @@
   },
   {
     "source": "auto-model",
+    "asset_key": "models/1b",
+    "title": "1b",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for 1b.",
+    "image": "assets/models/1B/model_tile.png",
+    "model_path": "assets/models/1B/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
     "asset_key": "models/campervan-bed",
     "title": "Campervan Bed",
     "meta": "3D Model · 2026",
     "description": "Interactive 3D model for Campervan Bed.",
     "image": "assets/models/Campervan-bed/model.png",
     "model_path": "assets/models/Campervan-bed/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
+    "asset_key": "models/campervan-bed-system",
+    "title": "Campervan Bed System",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Campervan Bed System.",
+    "image": "assets/models/Campervan-Bed-System/model_tile.png",
+    "model_path": "assets/models/Campervan-Bed-System/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
+    "asset_key": "models/campervan-single-cabinet",
+    "title": "Campervan Single Cabinet",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Campervan Single Cabinet.",
+    "image": "assets/models/Campervan-Single-Cabinet/model_tile.png",
+    "model_path": "assets/models/Campervan-Single-Cabinet/model.glb",
     "github_link": "",
     "demo_link": "",
     "tags": [
@@ -341,6 +456,24 @@
     "description": "Interactive 3D model for Kitchen Island Bench.",
     "image": "assets/models/Kitchen-Island-Bench/model_tile.png",
     "model_path": "assets/models/Kitchen-Island-Bench/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
+    "asset_key": "models/kitchenette boh",
+    "title": "Kitchenette Boh",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Kitchenette Boh.",
+    "image": "assets/models/Kitchenette BOH/BOH KITCHENETTE_.png",
+    "model_path": "assets/models/Kitchenette BOH/BOH KITCHENETTE.glb",
     "github_link": "",
     "demo_link": "",
     "tags": [
@@ -403,24 +536,6 @@
       "Auto Sync"
     ],
     "id": "5",
-    "gallery_images": []
-  },
-  {
-    "source": "auto-model",
-    "asset_key": "models/van-system",
-    "title": "Van System",
-    "meta": "3D Model · 2026",
-    "description": "Interactive 3D model for Van System.",
-    "image": "assets/models/Van-System/model_tile.png",
-    "model_path": "assets/models/Van-System/model.glb",
-    "github_link": "",
-    "demo_link": "",
-    "tags": [
-      "3D",
-      "Model",
-      "Auto Sync"
-    ],
-    "id": "4",
     "gallery_images": []
   },
   {
