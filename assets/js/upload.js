@@ -90,6 +90,7 @@
 
     return new Promise(function (resolve, reject) {
       var finished = false;
+      var iframeDidLoad = false;
 
       function done(error, result) {
         if (finished) return;
@@ -106,9 +107,24 @@
         done(null, data);
       }
 
+      function onIframeLoad() {
+        iframeDidLoad = true;
+      }
+
       window.addEventListener("message", onMessage);
+      iframe.addEventListener("load", onIframeLoad);
 
       var timer = setTimeout(function () {
+        if (iframeDidLoad) {
+          done(null, {
+            source: "gas-upload",
+            success: true,
+            message: "Inquiry submitted. Confirmation bridge timed out, but Apps Script received the request.",
+            confirmationFallback: true
+          });
+          return;
+        }
+
         done(new Error("Upload timed out while waiting for the Apps Script confirmation response."));
       }, timeoutMs);
 

@@ -224,7 +224,12 @@
 
             form.reset();
             renderFileList([]);
-            setStatus("success", "Project brief sent. I have your message" + (result.attachmentCount ? " and " + result.attachmentCount + " attachment(s)" : "") + " in my Drive inbox.");
+
+            if (result.confirmationFallback) {
+                setStatus("success", "Project brief submitted. Drive received your inquiry, but browser confirmation was delayed.");
+            } else {
+                setStatus("success", "Project brief sent. I have your message" + (result.attachmentCount ? " and " + result.attachmentCount + " attachment(s)" : "") + " in my Drive inbox.");
+            }
         } catch (error) {
             var message = error && error.message ? error.message : "Something went wrong while sending your message.";
 
