@@ -50,6 +50,34 @@
     });
   }
 
+  function normalizeMessageData(rawData) {
+    var data = rawData;
+
+    // Some browsers/webview bridges deliver postMessage payloads as JSON strings.
+    if (typeof data === "string") {
+      try {
+        data = JSON.parse(data);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    if (!data || typeof data !== "object") {
+      return null;
+    }
+
+    if (data.source === "gas-upload") {
+      return data;
+    }
+
+    // Defensive fallback for wrappers that nest the actual payload.
+    if (data.data && data.data.source === "gas-upload") {
+      return data.data;
+    }
+
+    return null;
+  }
+
   function postPayload(config) {
     if (!config || !config.webAppUrl) {
       throw new Error("webAppUrl is required.");
@@ -73,15 +101,15 @@
       }
 
       function onMessage(event) {
-        var data = event.data;
-        if (!data || data.source !== "gas-upload") return;
+        var data = normalizeMessageData(event.data);
+        if (!data) return;
         done(null, data);
       }
 
       window.addEventListener("message", onMessage);
 
       var timer = setTimeout(function () {
-        done(new Error("Upload timed out."));
+        done(new Error("Upload timed out while waiting for the Apps Script confirmation response."));
       }, timeoutMs);
 
       try {

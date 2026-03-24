@@ -146,6 +146,22 @@
         };
     }
 
+    function getRuntimeConfigError(runtime) {
+        if (!runtime.webAppUrl || !runtime.publicToken) {
+            return "Contact chat is not configured yet. Add the Google Apps Script URL and public token first.";
+        }
+
+        if (/script\.googleusercontent\.com\/macros\/echo/i.test(runtime.webAppUrl)) {
+            return "Use the stable Google Apps Script web app URL ending in /exec, not the temporary googleusercontent redirect URL.";
+        }
+
+        if (/\/dev(?:$|\?)/i.test(runtime.webAppUrl)) {
+            return "Use the public Google Apps Script /exec deployment URL, not the /dev test URL.";
+        }
+
+        return "";
+    }
+
     function setBusyState(button, isBusy) {
         if (!button) {
             return;
@@ -161,9 +177,10 @@
         var form = event.currentTarget;
         var submitButton = $(CONFIG.submitButtonId);
         var runtime = getRuntimeConfig();
+        var runtimeError = getRuntimeConfigError(runtime);
 
-        if (!runtime.webAppUrl || !runtime.publicToken) {
-            setStatus("error", "Contact chat is not configured yet. Add the Google Apps Script URL and public token first.");
+        if (runtimeError) {
+            setStatus("error", runtimeError);
             return;
         }
 
@@ -187,6 +204,7 @@
         try {
             var result = await window.GASUploader.submitPayload({
                 webAppUrl: runtime.webAppUrl,
+                timeoutMs: 90000,
                 payload: {
                     action: "submitInquiry",
                     token: runtime.publicToken,
@@ -208,7 +226,13 @@
             renderFileList([]);
             setStatus("success", "Project brief sent. I have your message" + (result.attachmentCount ? " and " + result.attachmentCount + " attachment(s)" : "") + " in my Drive inbox.");
         } catch (error) {
-            setStatus("error", error && error.message ? error.message : "Something went wrong while sending your message.");
+            var message = error && error.message ? error.message : "Something went wrong while sending your message.";
+
+            if (/timed out/i.test(message)) {
+                message = "The site did not receive the Apps Script confirmation in time. If the inquiry appears in Drive, redeploy the latest /exec web app version so it posts the success message back to the page.";
+            }
+
+            setStatus("error", message);
         } finally {
             setBusyState(submitButton, false);
         }
