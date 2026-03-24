@@ -520,6 +520,211 @@ main {
     color: var(--text-muted);
 }
 
+.contact-chat-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: var(--gap-lg);
+    align-items: start;
+}
+
+.contact-chat-sidebar {
+    display: grid;
+    gap: 1rem;
+}
+
+.contact-card,
+.contact-chat-panel {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+}
+
+.contact-card {
+    padding: 1.1rem 1.15rem;
+}
+
+.contact-card-label,
+.upload-summary-label,
+.chat-bubble-label {
+    margin: 0 0 0.65rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+}
+
+.contact-points {
+    margin: 0;
+    padding-left: 1.1rem;
+    display: grid;
+    gap: 0.45rem;
+    color: var(--text-main);
+}
+
+.contact-chat-panel {
+    padding: 1.25rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.chat-thread {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.chat-bubble {
+    max-width: 38rem;
+    padding: 0.95rem 1rem;
+    border-radius: 18px 18px 18px 6px;
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+}
+
+.chat-bubble p {
+    margin: 0;
+}
+
+.chat-bubble-muted {
+    background: #fafafa;
+}
+
+.contact-chat-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.contact-chat-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.contact-chat-grid.two-up {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.upload-row {
+    grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.9fr);
+    align-items: start;
+}
+
+.field {
+    display: grid;
+    gap: 0.45rem;
+}
+
+.field span {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    background: #fff;
+    color: var(--text-main);
+    font: inherit;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.field textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    outline: none;
+    border-color: var(--text-main);
+    box-shadow: 0 0 0 4px rgba(51, 51, 51, 0.08);
+}
+
+.field-note {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.upload-summary {
+    min-height: 100%;
+    border: 1px dashed var(--border-muted);
+    border-radius: 14px;
+    padding: 1rem;
+    background: #fcfcfc;
+}
+
+.file-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.file-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.82rem;
+}
+
+.file-chip strong {
+    font-weight: 600;
+}
+
+.empty-file-state {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.contact-chat-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.contact-chat-meta {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    max-width: 38rem;
+}
+
+.contact-chat-status {
+    min-height: 1.5rem;
+    padding: 0.95rem 1rem;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.contact-chat-status.is-pending {
+    color: var(--text-main);
+    background: #fafafa;
+}
+
+.contact-chat-status.is-success {
+    color: #115c2c;
+    background: #eef8f0;
+    border-color: #cfe7d5;
+}
+
+.contact-chat-status.is-error {
+    color: #8f2b2b;
+    background: #fff1f1;
+    border-color: #efcaca;
+}
+
 /* ===========================
    Filter Bar & Search
    =========================== */
@@ -649,6 +854,12 @@ main {
     .three-d-layout {
         grid-template-columns: 1fr;
         gap: var(--gap-lg);
+    }
+
+    .contact-chat-layout,
+    .contact-chat-grid.two-up,
+    .upload-row {
+        grid-template-columns: 1fr;
     }
 
     .section-hero {

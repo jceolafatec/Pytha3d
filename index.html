@@ -130,21 +130,123 @@
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="section">
-            <div class="shell two-column">
-                <div>
-                    <h2>Contact</h2>
-                </div>
-                <div>
-                    <p>
-                        Ready to collaborate, ask questions, or request more work samples?
-                        Reach out using the details below.
+        <section id="contact" class="section section-muted">
+            <div class="shell">
+                <div class="section-heading">
+                    <h2>Project Chat</h2>
+                    <p class="section-subtitle">
+                        Use this as your first point of contact. Send your brief, photos, drawings, or reference files,
+                        and everything lands in my Google Drive project inbox.
                     </p>
-                    <ul class="contact-list">
-                        <li><span>Email</span><a href="mailto:jceola.fatec@gmail.com">jceola.fatec@gmail.com</a></li>
-                        <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/jeferson-ceola/" target="_blank" rel="noreferrer">Jeferson Ceola</a></li>
-                        <li><span>Portfolio</span><a href="https://jceola.com/" target="_blank" rel="noreferrer">jceola.com</a></li>
-                    </ul>
+                </div>
+
+                <div class="contact-chat-layout">
+                    <aside class="contact-chat-sidebar">
+                        <div class="contact-card">
+                            <p class="contact-card-label">Direct Contact</p>
+                            <ul class="contact-list">
+                                <li><span>Email</span><a href="mailto:jceola.fatec@gmail.com">jceola.fatec@gmail.com</a></li>
+                                <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/jeferson-ceola/" target="_blank" rel="noreferrer">Jeferson Ceola</a></li>
+                                <li><span>Portfolio</span><a href="https://jceola.com/" target="_blank" rel="noreferrer">jceola.com</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="contact-card">
+                            <p class="contact-card-label">What To Send</p>
+                            <ul class="contact-points">
+                                <li>Project type and scope</li>
+                                <li>Timeline or key deadline</li>
+                                <li>Photos, marked-up screenshots, or drawings</li>
+                                <li>Any dimensions, constraints, or fabrication notes</li>
+                            </ul>
+                        </div>
+                    </aside>
+
+                    <div class="contact-chat-panel">
+                        <div class="chat-thread" aria-hidden="true">
+                            <article class="chat-bubble chat-bubble-assistant">
+                                <p class="chat-bubble-label">Pytha Draftsman</p>
+                                <p>
+                                    Tell me what you need built, documented, or modeled. You can attach images,
+                                    PDFs, CAD references, or other project files.
+                                </p>
+                            </article>
+                            <article class="chat-bubble chat-bubble-assistant chat-bubble-muted">
+                                <p>
+                                    Best for initial review: up to 4 files, 10 MB each, 20 MB total.
+                                </p>
+                            </article>
+                        </div>
+
+                        <form id="contact-chat-form" class="contact-chat-form" novalidate>
+                            <div class="contact-chat-grid two-up">
+                                <label class="field">
+                                    <span>Name</span>
+                                    <input type="text" name="name" autocomplete="name" required />
+                                </label>
+                                <label class="field">
+                                    <span>Email</span>
+                                    <input type="email" name="email" autocomplete="email" required />
+                                </label>
+                            </div>
+
+                            <div class="contact-chat-grid two-up">
+                                <label class="field">
+                                    <span>Phone</span>
+                                    <input type="tel" name="phone" autocomplete="tel" />
+                                </label>
+                                <label class="field">
+                                    <span>Project Type</span>
+                                    <select name="projectType" required>
+                                        <option value="">Select a project type</option>
+                                        <option value="Joinery">Joinery</option>
+                                        <option value="Cabinetry">Cabinetry</option>
+                                        <option value="Shopfitting">Shopfitting</option>
+                                        <option value="Construction Detailing">Construction Detailing</option>
+                                        <option value="3D Modelling">3D Modelling</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="contact-chat-grid two-up">
+                                <label class="field">
+                                    <span>Timeline</span>
+                                    <input type="text" name="timeline" placeholder="e.g. ASAP, 2 weeks, next month" />
+                                </label>
+                                <label class="field">
+                                    <span>Budget</span>
+                                    <input type="text" name="budget" placeholder="Optional" />
+                                </label>
+                            </div>
+
+                            <label class="field field-large">
+                                <span>Project Brief</span>
+                                <textarea name="brief" rows="6" placeholder="Describe the job, what stage it is at, what you need from me, and anything important I should know." required></textarea>
+                            </label>
+
+                            <div class="contact-chat-grid upload-row">
+                                <label class="field field-large">
+                                    <span>Attach Files</span>
+                                    <input id="contact-chat-files" type="file" name="attachments" multiple />
+                                    <small class="field-note">Images and project files are uploaded to a Google Drive inbox after you send the form.</small>
+                                </label>
+                                <div class="upload-summary">
+                                    <p class="upload-summary-label">Selected Files</p>
+                                    <div id="contact-chat-file-list" class="file-chip-list">
+                                        <p class="empty-file-state">No files selected yet.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="contact-chat-actions">
+                                <button id="contact-chat-submit" class="btn primary" type="submit">Send Project Brief</button>
+                                <p class="contact-chat-meta">Replies still come directly from me. This simply replaces the old contact method with a structured project inbox.</p>
+                            </div>
+
+                            <div id="contact-chat-status" class="contact-chat-status" role="status" aria-live="polite"></div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -157,7 +259,16 @@
         </div>
     </footer>
 
+    <script>
+        window.PYTHA_CONTACT_CHAT_CONFIG = {
+            webAppUrl: "https://script.google.com/macros/s/AKfycbzYrYAKTniA2_QLqlGAdYXoPuaYCDwZMHdyTx8xC9F2A4TPukY3cFH565k5XHPfRHCcDg/exec",
+            publicToken: "4c5f7g8h910a8f9e2d1d4c5f7g8h910f9e2d1d4c5f4c5f7g8h910a8f9e2d1d4c5f7g8h910f9e2d1d4c5f"
+        };
+    </script>
+
     <!-- Main JS -->
+    <script src="assets/js/upload.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/contact-chat.js"></script>
 </body>
 </html>

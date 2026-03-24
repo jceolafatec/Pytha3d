@@ -414,6 +414,24 @@
   },
   {
     "source": "auto-model",
+    "asset_key": "models/campervan-side-benchtop",
+    "title": "Campervan Side Benchtop",
+    "meta": "3D Model · 2026",
+    "description": "Interactive 3D model for Campervan Side Benchtop.",
+    "image": "assets/models/Campervan-Side-Benchtop/model_tile.png",
+    "model_path": "assets/models/Campervan-Side-Benchtop/model.glb",
+    "github_link": "",
+    "demo_link": "",
+    "tags": [
+      "3D",
+      "Model",
+      "Auto Sync"
+    ],
+    "id": "4",
+    "gallery_images": []
+  },
+  {
+    "source": "auto-model",
     "asset_key": "models/campervan-single-cabinet",
     "title": "Campervan Single Cabinet",
     "meta": "3D Model · 2026",
