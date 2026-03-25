@@ -1,0 +1,683 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jeferson Ceola — CV</title>
+    <style>
+        /* ── Reset & Base ─────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink:        #111111;
+            --mid:        #444444;
+            --muted:      #666666;
+            --rule:       #d0d0d0;
+            --accent:     #1a1a1a;
+            --page-width: 210mm;
+            --page-height: 297mm;
+            --gap:        1.5rem;
+        }
+
+        html { font-size: 15px; }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: var(--ink);
+            background: #f4f4f4;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+        }
+
+        /* ── Page Shell ───────────────────────────────────── */
+        .page {
+            width: min(100%, var(--page-width));
+            min-height: var(--page-height);
+            margin: 0 auto;
+            background: #fff;
+            padding: 1.4cm 1.55cm;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .page + .page {
+            margin-top: 1.5rem;
+        }
+
+        /* ── Header ───────────────────────────────────────── */
+        .resume-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: start;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--ink);
+            margin-bottom: 1.75rem;
+        }
+
+        .resume-header h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .resume-header .title {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.9rem;
+            color: var(--mid);
+            margin-top: 0.25rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .contact-block {
+            text-align: right;
+            font-family: 'Arial', sans-serif;
+            font-size: 0.82rem;
+            color: var(--mid);
+            line-height: 1.8;
+        }
+
+        .contact-block a {
+            color: var(--mid);
+            text-decoration: none;
+        }
+
+        .contact-block a:hover { text-decoration: underline; }
+
+        /* ── Section Layout ───────────────────────────────── */
+        .section {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 0 2.25rem;
+            margin-bottom: 1.35rem;
+        }
+
+        .section-label {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding-top: 0.1rem;
+        }
+
+        .section-body {
+            border-top: 1px solid var(--rule);
+            padding-top: 0.7rem;
+        }
+
+        /* ── Summary ──────────────────────────────────────── */
+        .summary p {
+            font-size: 0.93rem;
+            color: var(--mid);
+            line-height: 1.68;
+        }
+
+        .summary p + p { margin-top: 0.65rem; }
+
+        /* ── Experience ───────────────────────────────────── */
+        .role + .role {
+            margin-top: 1.1rem;
+            padding-top: 1.1rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .role {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .role-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.2rem;
+            flex-wrap: wrap;
+        }
+
+        .role-title {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .role-period {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.78rem;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .role-org {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.82rem;
+            color: var(--mid);
+            margin-bottom: 0.55rem;
+        }
+
+        .role-org a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .role-org a:hover { text-decoration: underline; }
+
+        .role-body ul {
+            padding-left: 1.1rem;
+            font-size: 0.88rem;
+            color: var(--mid);
+            line-height: 1.58;
+        }
+
+        .role-body ul li + li { margin-top: 0.2rem; }
+
+        .achievement {
+            margin-top: 0.45rem;
+            padding-top: 0.45rem;
+            border-top: 1px dashed var(--rule);
+        }
+
+        .achievement-label {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.3rem;
+        }
+
+        /* ── Skills ───────────────────────────────────────── */
+        .skills-list {
+            padding-left: 1.1rem;
+            font-size: 0.88rem;
+            color: var(--mid);
+            line-height: 1.58;
+        }
+
+        .skills-list li + li { margin-top: 0.18rem; }
+
+        /* ── Education / Specializations ──────────────────── */
+        .edu-item + .edu-item {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--rule);
+        }
+
+        .edu-degree {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .edu-inst {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.82rem;
+            color: var(--mid);
+        }
+
+        .edu-year {
+            font-family: 'Arial', sans-serif;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* ── Print ────────────────────────────────────────── */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @media print {
+            html {
+                font-size: 13px;
+            }
+
+            html, body {
+                width: 210mm;
+                height: auto;
+            }
+
+            body {
+                background: #fff;
+                padding: 0;
+                margin: 0;
+            }
+
+            .page {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 11mm 12mm;
+                box-shadow: none;
+                overflow: hidden;
+                page-break-after: always;
+                break-after: page;
+            }
+
+            .page + .page {
+                margin-top: 0;
+            }
+
+            .page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+
+            .resume-header {
+                gap: 0.75rem;
+                padding-bottom: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .resume-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .resume-header .title,
+            .contact-block,
+            .role-period,
+            .role-org,
+            .edu-inst,
+            .edu-year {
+                font-size: 0.76rem;
+            }
+
+            .section {
+                gap: 0 1rem;
+                margin-bottom: 0.9rem;
+            }
+
+            .section-label {
+                font-size: 0.64rem;
+            }
+
+            .section-body {
+                padding-top: 0.5rem;
+            }
+
+            .summary p {
+                font-size: 0.84rem;
+                line-height: 1.45;
+            }
+
+            .summary p + p {
+                margin-top: 0.45rem;
+            }
+
+            .skills-list,
+            .role-body ul {
+                font-size: 0.8rem;
+                line-height: 1.42;
+            }
+
+            .skills-list li + li,
+            .role-body ul li + li {
+                margin-top: 0.12rem;
+            }
+
+            .role + .role {
+                margin-top: 0.7rem;
+                padding-top: 0.7rem;
+            }
+
+            .role-header {
+                margin-bottom: 0.1rem;
+            }
+
+            .role-title,
+            .edu-degree {
+                font-size: 0.84rem;
+            }
+
+            .achievement {
+                margin-top: 0.3rem;
+                padding-top: 0.3rem;
+            }
+
+            .achievement-label {
+                font-size: 0.66rem;
+                margin-bottom: 0.15rem;
+            }
+
+            .edu-item + .edu-item {
+                margin-top: 0.55rem;
+                padding-top: 0.55rem;
+            }
+
+            .page.page-last-experience .section {
+                margin-bottom: 0.7rem;
+            }
+
+            .page.page-last-experience .section-body {
+                padding-top: 0.35rem;
+            }
+
+            .page.page-last-experience .role + .role {
+                margin-top: 0.5rem;
+                padding-top: 0.5rem;
+            }
+
+            .page.page-last-experience .role-title,
+            .page.page-last-experience .edu-degree {
+                font-size: 0.8rem;
+            }
+
+            .page.page-last-experience .role-period,
+            .page.page-last-experience .role-org,
+            .page.page-last-experience .role-body ul,
+            .page.page-last-experience .achievement p {
+                font-size: 0.74rem !important;
+                line-height: 1.32 !important;
+            }
+
+            .page.page-last-experience .role-body ul li + li {
+                margin-top: 0.08rem;
+            }
+
+            .page.page-last-experience .achievement {
+                margin-top: 0.2rem;
+                padding-top: 0.2rem;
+            }
+
+            a { color: inherit; text-decoration: none; }
+        }
+
+        @media (max-width: 640px) {
+            .page { padding: 1.5rem; }
+            .resume-header { grid-template-columns: 1fr; }
+            .contact-block { text-align: left; }
+            .section { grid-template-columns: 1fr; gap: 0.5rem; }
+            .section-label { border-bottom: 1px solid var(--rule); padding-bottom: 0.3rem; }
+            .section-body { border-top: none; padding-top: 0; }
+        }
+    </style>
+</head>
+<body>
+<div class="page page-last-experience">
+
+    <!-- ── HEADER ──────────────────────────────────────────── -->
+    <header class="resume-header">
+        <div>
+            <h1>Jeferson Ceola</h1>
+            <p class="title">PYTHA 3D CAD Specialist</p>
+        </div>
+        <div class="contact-block">
+            <div>(+61) 0424 308 558</div>
+            <div><a href="mailto:jceola.fatec@gmail.com">jceola.fatec@gmail.com</a></div>
+            <div>Gold Coast, QLD, Australia</div>
+            <div><a href="https://jceola.com" target="_blank">jceola.com</a></div>
+        </div>
+    </header>
+
+    <!-- ── PROFILE ─────────────────────────────────────────── -->
+    <div class="section summary">
+        <div class="section-label">Profile</div>
+        <div class="section-body">
+            <p>
+                Highly motivated construction professional with extensive experience delivering projects from
+                pre-construction through to completion. Strong proficiency in PYTHA 3D CAD supports accurate
+                3D modelling, visualisation, and drawing development for planning, coordination, and client
+                communication. Custom Python scripting streamlines documentation workflows by automating
+                material take-offs, edge band schedules, hardware lists, and other critical project data,
+                improving both efficiency and accuracy.
+            </p>
+            <p>
+                Consistently delivers successful projects by building strong relationships with clients and
+                identifying their needs to promote effective solutions. Adept at setting and achieving goals
+                through meticulous planning. Strong listening skills help navigate complex stakeholder
+                environments and avoid internal conflicts through dialogue.
+            </p>
+            <p>
+                Capable of handling multiple concurrent tasks including advanced 3D modelling in PYTHA 3D CAD,
+                ALPHACAM nesting for CNC production, and Python automation for documentation and reporting.
+                Dedicated to continuous professional growth and embracing new challenges.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── EDUCATION ───────────────────────────────────────── -->
+    <div class="section">
+        <div class="section-label">Education</div>
+        <div class="section-body">
+
+            <div class="edu-item">
+                <div class="edu-degree">Technology of Civil Construction — Modality Buildings</div>
+                <div class="edu-inst">São Paulo State Technological Faculty (FATEC-SP)</div>
+                <div class="edu-year">2007 – 2011</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree">Certificate IV in Project Management</div>
+                <div class="edu-inst">Australian Pacific College</div>
+                <div class="edu-year">2017 – 2018</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree">Diploma in Project Management</div>
+                <div class="edu-inst">Australian Pacific College</div>
+                <div class="edu-year">2018</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree">Advanced Diploma in Project Management</div>
+                <div class="edu-inst">Australian Pacific College</div>
+                <div class="edu-year">2019 – 2020</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── SPECIALIZATIONS ─────────────────────────────────── -->
+    <div class="section">
+        <div class="section-label">Certifications</div>
+        <div class="section-body">
+
+            <div class="edu-item">
+                <div class="edu-degree">PYTHA 3D CAD — Full Training</div>
+                <div class="edu-year">2023 – 2024</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree"><a href="https://www.coursera.org/account/accomplishments/specialization/C52B3VZRPGWA" target="_blank" style="color:var(--ink);">Construction Management Specialization</a></div>
+                <div class="edu-inst">Columbia University (Coursera)</div>
+                <div class="edu-year">2023 – 2024</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree"><a href="https://www.coursera.org/account/accomplishments/specialization/K76MN7BUD7FR" target="_blank" style="color:var(--ink);">Machine Learning for Trading Specialization</a></div>
+                <div class="edu-inst">Google Cloud &amp; New York Institute of Finance (Coursera)</div>
+                <div class="edu-year">2023 – 2024</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree"><a href="https://www.coursera.org/account/accomplishments/specialization/UU8RP8KPAP75" target="_blank" style="color:var(--ink);">Investment Management with Python and Machine Learning</a></div>
+                <div class="edu-inst">EDHEC Business School (Coursera)</div>
+                <div class="edu-year">2023 – 2024</div>
+            </div>
+
+            <div class="edu-item">
+                <div class="edu-degree"><a href="https://www.coursera.org/account/accomplishments/professional-cert/Z5CQ3NQ6LMWV" target="_blank" style="color:var(--ink);">Google Data Analytics Professional Certificate</a></div>
+                <div class="edu-inst">Google (Coursera)</div>
+                <div class="edu-year">2023 – 2024</div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="page">
+
+    <!-- ── SKILLS ───────────────────────────────────────────── -->
+    <div class="section">
+        <div class="section-label">Skills</div>
+        <div class="section-body">
+            <ul class="skills-list">
+                <li>Shop drawings &amp; detailing: produce, review, and update drawings for fabrication and installation, ensuring constructability and compliance with specifications;</li>
+                <li>2D and 3D drafting and modelling in AutoCAD, with a strong understanding of plans, elevations, sections, and details;</li>
+                <li>Drawing set coordination: align architectural, structural, and services information, resolve clashes, and manage RFIs and clarifications;</li>
+                <li>Mark-ups and revision control: incorporate client and consultant feedback, maintain version history, and issue updated drawing packages;</li>
+                <li>QA and drawing checks covering dimensions, tolerances, materials, finishes, hardware schedules, and consistency across sheets;</li>
+                <li>As-built documentation: capture site changes and prepare accurate as-built drawings for handover;</li>
+                <li>Documentation and schedules: prepare material take-offs, edge and hardware lists, and supporting documentation to accompany drawings;</li>
+                <li>Proficiency in PYTHA 3D CAD for visualisation and detailed 3D modelling, ALPHACAM nesting for CNC production, and Python scripting to automate drawing-related lists and schedules.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ── EXPERIENCE ──────────────────────────────────────── -->
+    <div class="section">
+        <div class="section-label">Experience</div>
+        <div class="section-body">
+
+            <div class="role">
+                <div class="role-header">
+                    <span class="role-title">PYTHA Draftsman</span>
+                    <span class="role-period">Jan 2025 — Present</span>
+                </div>
+                <div class="role-org">LSC Fitouts, Australia &mdash; <a href="https://lscfitouts.com.au/" target="_blank">lscfitouts.com.au</a></div>
+                <div class="role-body">
+                    <ul>
+                        <li>Review project documentation (architectural drawings, specifications, and scope) to confirm requirements, finishes, and constructability prior to production;</li>
+                        <li>Produce and coordinate shop drawings for fitout and joinery packages (plans, elevations, sections, and detailed call-outs) using AutoCAD;</li>
+                        <li>Develop 3D models and visualisations to support client approvals and improve on-site coordination;</li>
+                        <li>Interpret and translate design intent into fabrication-ready information, including dimensions, tolerances, materials, finishes, and hardware requirements;</li>
+                        <li>Prepare ALPHACAM nesting for CNC production and optimise sheet utilisation, labelling, and part organisation for the factory workflow;</li>
+                        <li>Manage drawing mark-ups and revisions, maintain version control, and issue updated drawing sets to relevant stakeholders;</li>
+                        <li>Maintain organised drawing registers and file structures (issue sets, revisions, and production packs) to ensure clear communication and traceability;</li>
+                        <li>Liaise with site teams, subcontractors, and suppliers to resolve clashes and queries and support smooth installation;</li>
+                        <li>Support procurement and scheduling by preparing material take-offs and tracking key materials and hardware deliveries.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="role">
+                <div class="role-header">
+                    <span class="role-title">Civil Engineering Technician</span>
+                    <span class="role-period">May 2021 — Dec 2024</span>
+                </div>
+                <div class="role-org">Accent Benchtops, Australia &mdash; <a href="http://www.accentbenchtops.com" target="_blank">accentbenchtops.com</a></div>
+                <div class="role-body">
+                    <ul>
+                        <li>Studied, analysed, and understood all project documents before starting, determining specifications and materials required;</li>
+                        <li>Ensured plans were correct and constructible, confirming activities were performed within planning;</li>
+                        <li>Discussed project specifics with contractors and ensured understanding before execution;</li>
+                        <li>Managed employees through task allocation and supervision;</li>
+                        <li>Developed and managed budgets consistent with timeline requirements;</li>
+                        <li>Scheduled and coordinated subcontractors to complete projects within time, budget, and scope;</li>
+                        <li>Managed permitting and approval phases and ensured all authorisations were received before initiating construction;</li>
+                        <li>Oversaw ordering and tracking of materials and equipment;</li>
+                        <li>Developed shop drawings and 3D simulations using AutoCAD;</li>
+                        <li>Read and interpreted blueprints and drawings to determine specifications and materials required.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="page">
+
+    <div class="section">
+        <div class="section-label">Experience</div>
+        <div class="section-body">
+
+            <div class="role">
+                <div class="role-header">
+                    <span class="role-title">Civil Engineering Technician</span>
+                    <span class="role-period">May 2018 — Apr 2021</span>
+                </div>
+                <div class="role-org">Interior Marble, Australia &mdash; <a href="https://www.interiormarbleprojects.com.au" target="_blank">interiormarbleprojects.com.au</a></div>
+                <div class="role-body">
+                    <ul>
+                        <li>Studied, analysed, and understood all project documents, determining specifications and materials required for civil projects;</li>
+                        <li>Ensured plans were correct and constructible within planning;</li>
+                        <li>Responsible for safety and ensuring WH&amp;S compliance at all times on and off-site;</li>
+                        <li>Managed employees through task allocation and supervision;</li>
+                        <li>Developed and managed budgets and scheduled and coordinated subcontractors within time, budget, and scope;</li>
+                        <li>Managed development and construction timelines and oversaw permitting and approval phases;</li>
+                        <li>Developed shop drawings and 3D simulations using AutoCAD;</li>
+                        <li>Read and interpreted blueprints and drawings to determine project specifications and materials.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="role">
+                <div class="role-header">
+                    <span class="role-title">Civil Engineer Technologist</span>
+                    <span class="role-period">Mar 2015 — Mar 2016</span>
+                </div>
+                <div class="role-org">Lock Engenharia Ltda., Brazil &mdash; <a href="http://www.lock.com.br" target="_blank">lock.com.br</a></div>
+                <div class="role-body">
+                    <ul>
+                        <li>Analysed and understood all project documents, determining specifications and materials for civil projects;</li>
+                        <li>Ensured constructibility and compliance and discussed project specifics with contractors before execution;</li>
+                        <li>Responsible for safety and WH&amp;S compliance and managed employees and task distribution;</li>
+                        <li>Developed and managed budgets and scheduled and coordinated subcontractors;</li>
+                        <li>Managed timelines and approval phases and oversaw ordering and tracking of materials and equipment.</li>
+                    </ul>
+                    <div class="achievement">
+                        <div class="achievement-label">Achievement</div>
+                        <p style="font-size:0.87rem;color:var(--mid);line-height:1.55;">Part of a team that developed a comprehensive task manual documenting all construction details and standards. Result: increased efficiency in construction processes, reducing costs and execution time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="role">
+                <div class="role-header">
+                    <span class="role-title">Civil Engineer Technologist</span>
+                    <span class="role-period">Mar 2012 — Mar 2015</span>
+                </div>
+                <div class="role-org">Kross Engenharia, Brazil &mdash; <a href="http://www.kross.com.br" target="_blank">kross.com.br</a></div>
+                <div class="role-body">
+                    <ul>
+                        <li>Planned civil activities and provided management assistance across all project phases from pre-construction to completion;</li>
+                        <li>Surveyed operations to ensure activities were performed within planning;</li>
+                        <li>Contracted outsourced service companies, ensuring term, price, and quality;</li>
+                        <li>Managed development and construction timelines and helped develop and manage budgets;</li>
+                        <li>Managed approval phases and oversaw ordering and tracking of materials and equipment.</li>
+                    </ul>
+                    <div class="achievement">
+                        <div class="achievement-label">Achievement</div>
+                        <p style="font-size:0.87rem;color:var(--mid);line-height:1.55;">Participated in multiple construction tools implementation projects introducing weekly control of critical items, schedule, contract status, change orders, financial control, and photographic reports. Projects became more concise and easier to manage, increasing quality and customer satisfaction.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="role">
+                <div class="role-header">
+                    <span class="role-title">Civil Engineer Technologist (Intern)</span>
+                    <span class="role-period">Oct 2008 — Feb 2012</span>
+                </div>
+                <div class="role-org">Lock Engenharia Ltda., Brazil &mdash; <a href="http://www.lock.com.br" target="_blank">lock.com.br</a></div>
+                <div class="role-body">
+                    <ul>
+                        <li>Planned civil activities and provided management assistance across all construction project phases;</li>
+                        <li>Contracted outsourced services and managed timelines and approval phases;</li>
+                        <li>Managed and supervised employees and helped develop and manage budgets;</li>
+                        <li>Oversaw ordering and tracking of materials and equipment.</li>
+                    </ul>
+                    <div class="achievement">
+                        <div class="achievement-label">Achievement</div>
+                        <p style="font-size:0.87rem;color:var(--mid);line-height:1.55;">Started as engineering trainee and was promoted to Junior Construction Manager based on proactivity, professionalism, and dedication. Participated in SIENGE integrated engineering system implementation, achieving a 30% time-saving in process execution.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
