@@ -7,6 +7,9 @@ let ambientLight, directionalLight;
 let modelGroups = [];
 let initialCameraPosition = { x: 0, y: 2, z: 5 };
 let edgesVisible = true;
+let selectedGroups = new Set();
+let isolationActive = false;
+let cameraTween = null;
 
 function getErrorMessage(error) {
     if (!error) return '';
@@ -139,6 +142,17 @@ function init() {
 // ====================================
 function animate() {
     requestAnimationFrame(animate);
+
+    // Process camera tween
+    if (cameraTween) {
+        const elapsed = performance.now() - cameraTween.startTime;
+        const t = Math.min(elapsed / cameraTween.duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3); // ease-out cubic
+        camera.position.lerpVectors(cameraTween.fromPos, cameraTween.toPos, ease);
+        controls.target.lerpVectors(cameraTween.fromTarget, cameraTween.toTarget, ease);
+        if (t >= 1) cameraTween = null;
+    }
+
     controls.update();
     renderer.render(scene, camera);
 }
@@ -280,6 +294,11 @@ function loadModel(modelPath) {
 // ====================================
 function extractGroups(object) {
     modelGroups = [];
+    selectedGroups = new Set();
+    isolationActive = false;
+    var btn = document.getElementById('btn-isolate');
+    if (btn) { btn.textContent = 'Isolate'; btn.classList.remove('active'); }
+
     const groupTogglesContainer = document.getElementById('group-toggles');
     groupTogglesContainer.innerHTML = '';
 
@@ -293,21 +312,28 @@ function extractGroups(object) {
                     visible: true
                 });
 
-                // Create toggle checkbox
+                // Create toggle row
                 const toggleDiv = document.createElement('div');
                 toggleDiv.className = 'group-toggle';
-                
+                toggleDiv.dataset.group = groupName;
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.id = `group-${groupName}`;
                 checkbox.checked = true;
                 checkbox.addEventListener('change', (e) => {
+                    e.stopPropagation();
                     toggleGroupVisibility(groupName, e.target.checked);
                 });
 
                 const label = document.createElement('label');
-                label.htmlFor = `group-${groupName}`;
+                label.htmlFor = checkbox.id;
                 label.textContent = groupName || 'Unnamed Group';
+                // Click label to select; shift-click for multi-select
+                label.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleGroupSelection(groupName, e.shiftKey);
+                });
 
                 toggleDiv.appendChild(checkbox);
                 toggleDiv.appendChild(label);
@@ -345,13 +371,142 @@ function toggleGroupControls() {
 // Reset Camera to Initial Position
 // ====================================
 function resetCamera() {
-    camera.position.set(
-        initialCameraPosition.x,
-        initialCameraPosition.y,
-        initialCameraPosition.z
+    startCameraTween(
+        new THREE.Vector3(initialCameraPosition.x, initialCameraPosition.y, initialCameraPosition.z),
+        new THREE.Vector3(0, 0, 0)
     );
-    controls.target.set(0, 0, 0);
-    controls.update();
+}
+
+// ====================================
+// Camera Tween Helper
+// ====================================
+function startCameraTween(toPos, toTarget, duration = 700) {
+    cameraTween = {
+        fromPos: camera.position.clone(),
+        fromTarget: controls.target.clone(),
+        toPos: toPos.clone(),
+        toTarget: toTarget.clone(),
+        duration: duration,
+        startTime: performance.now()
+    };
+}
+
+// ====================================
+// Toast Notification
+// ====================================
+function showToast(message) {
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add('visible');
+    clearTimeout(el._timer);
+    el._timer = setTimeout(function () { el.classList.remove('visible'); }, 2800);
+}
+
+// ====================================
+// Group Selection
+// ====================================
+function toggleGroupSelection(groupName, addToSelection) {
+    if (addToSelection) {
+        if (selectedGroups.has(groupName)) {
+            selectedGroups.delete(groupName);
+        } else {
+            selectedGroups.add(groupName);
+        }
+    } else {
+        if (selectedGroups.has(groupName) && selectedGroups.size === 1) {
+            selectedGroups.clear();
+        } else {
+            selectedGroups.clear();
+            selectedGroups.add(groupName);
+        }
+    }
+    updateSelectionUI();
+}
+
+function updateSelectionUI() {
+    document.querySelectorAll('.group-toggle').forEach(function (div) {
+        if (selectedGroups.has(div.dataset.group)) {
+            div.classList.add('selected');
+        } else {
+            div.classList.remove('selected');
+        }
+    });
+}
+
+// ====================================
+// Focus Camera on Selected Parts
+// ====================================
+function focusOnSelected() {
+    if (selectedGroups.size === 0) {
+        showToast('Select a part first to focus on it');
+        return;
+    }
+
+    var box = new THREE.Box3();
+    selectedGroups.forEach(function (name) {
+        var group = modelGroups.find(function (g) { return g.name === name; });
+        if (group && group.object) {
+            box.union(new THREE.Box3().setFromObject(group.object));
+        }
+    });
+
+    if (box.isEmpty()) return;
+
+    var center = box.getCenter(new THREE.Vector3());
+    var size = box.getSize(new THREE.Vector3());
+    var maxDim = Math.max(size.x, size.y, size.z);
+    var fov = camera.fov * (Math.PI / 180);
+    var distance = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.8;
+
+    var dir = camera.position.clone().sub(controls.target).normalize();
+    var newPos = center.clone().add(dir.multiplyScalar(distance));
+
+    startCameraTween(newPos, center);
+}
+
+// ====================================
+// Isolate / Show All
+// ====================================
+function isolateSelected() {
+    if (selectedGroups.size === 0) {
+        showToast('Select a part first to isolate it');
+        return;
+    }
+
+    modelGroups.forEach(function (group) {
+        var shouldBeVisible = selectedGroups.has(group.name);
+        group.object.visible = shouldBeVisible;
+        group.visible = shouldBeVisible;
+        var cb = document.getElementById('group-' + group.name);
+        if (cb) cb.checked = shouldBeVisible;
+    });
+
+    isolationActive = true;
+    var btn = document.getElementById('btn-isolate');
+    if (btn) {
+        btn.textContent = 'Show All';
+        btn.classList.add('active');
+    }
+}
+
+function toggleIsolation() {
+    if (isolationActive) {
+        modelGroups.forEach(function (group) {
+            group.object.visible = true;
+            group.visible = true;
+            var cb = document.getElementById('group-' + group.name);
+            if (cb) cb.checked = true;
+        });
+        isolationActive = false;
+        var btn = document.getElementById('btn-isolate');
+        if (btn) {
+            btn.textContent = 'Isolate';
+            btn.classList.remove('active');
+        }
+    } else {
+        isolateSelected();
+    }
 }
 
 // ====================================
