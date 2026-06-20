@@ -140,9 +140,25 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.45rem;
+            margin-bottom: 0.3rem;
+            padding: 0.18rem 0.4rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
         }
-        .group-toggle label { cursor: pointer; }
+        .group-toggle:hover { background: rgba(255,255,255,0.06); }
+        .group-toggle.selected {
+            background: rgba(100,160,255,0.18);
+            border-color: rgba(100,160,255,0.38);
+        }
+        .group-toggle label { cursor: pointer; flex: 1; }
+        #group-hint {
+            font-size: 0.68rem;
+            color: rgba(255,255,255,0.32);
+            margin: 0 0 0.65rem;
+            line-height: 1.45;
+        }
 
         /* ── Loading & error overlays ── */
         #loading {
@@ -169,6 +185,32 @@
             text-align: center;
             display: none;
             z-index: 20;
+        }
+
+        /* ── Toast notification ── */
+        #toast {
+            position: fixed;
+            bottom: 5.6rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: rgba(22,22,34,0.94);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.88);
+            padding: 0.52rem 1.3rem;
+            border-radius: 6px;
+            font-size: 0.76rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            pointer-events: none;
+            z-index: 30;
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            white-space: nowrap;
+        }
+        #toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         /* ── Hint text ── */
@@ -206,6 +248,7 @@
     <!-- Group controls panel (toggled by Parts button) -->
     <div id="group-controls">
         <h3>Parts</h3>
+        <p id="group-hint">Click to select &nbsp;·&nbsp; Shift-click for multi-select</p>
         <div id="group-toggles"></div>
     </div>
 
@@ -215,11 +258,14 @@
         <button class="ctrl-btn" id="btn-wire" onclick="toggleWireframe()">Wireframe</button>
         <button class="ctrl-btn" onclick="resetCamera()">Reset View</button>
         <button class="ctrl-btn" onclick="toggleGroupControls()">Parts</button>
+        <button class="ctrl-btn" id="btn-isolate" onclick="toggleIsolation()">Isolate</button>
+        <button class="ctrl-btn" onclick="focusOnSelected()">Focus</button>
     </div>
 
     <!-- Overlays -->
     <div id="loading">Loading 3D model&#8230;</div>
     <div id="error"></div>
+    <div id="toast"></div>
     <p id="orbit-hint">Drag to rotate &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Right-drag to pan</p>
 
     <!-- Three.js r128 -->

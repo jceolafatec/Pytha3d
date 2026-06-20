@@ -1,0 +1,3 @@
+127.0.0.1 - - [02/Apr/2026 08:28:50] "GET /viewer.html HTTP/1.1" 200 -
+127.0.0.1 - - [02/Apr/2026 08:28:52] "GET /viewer.html HTTP/1.1" 200 -
+127.0.0.1 - - [02/Apr/2026 08:28:52] "GET /assets/js/viewer.js HTTP/1.1" 200 -
